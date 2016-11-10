@@ -26,4 +26,4 @@ if __name__ == '__main__':
     coefs = linreg.coef_
 
     with open('forest_relevances.pkl','w') as f:
-        pickle.dump(coefs)
+        pickle.dump(coefs, f)
