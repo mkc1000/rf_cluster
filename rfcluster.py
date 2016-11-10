@@ -5,7 +5,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.metrics.pairwise import pairwise_distances
 
 class RFCluster(object):
-    def __init__(self, n_forests, n_trees=3, n_features_to_predict=0.2, max_depth=5, outputting_weights=False, weight_extent=1):
+    def __init__(self, n_forests, n_trees=1, n_features_to_predict=0.5, max_depth=5, outputting_weights=False, weight_extent=1):
         self.n_forests = n_forests
         self.n_trees = n_trees
         self.n_features_to_predict = n_features_to_predict
@@ -56,7 +56,12 @@ class RFCluster(object):
                 mean_squared_error = np.sum(np.square(y_temp - predictions))/y_temp.shape[0]
                 y_temp_var = np.sum(np.apply_along_axis(np.var, 0, y_temp))
                 var_reduction = (y_temp_var - mean_squared_error)/y_temp_var
-                self.weights.append(var_reduction**self.weight_extent)
+                weight = var_reduction**self.weight_extent
+                ##Alternative: based on min column forest predicts
+                min_feat_to_predict = np.min(features_to_predict)
+                var_min_feat_to_predict = np.var(X[:,min_feat_to_predict])
+                weight = var_min_feat_to_predict**self.weight_extent
+                self.weights.append(weight)
             if len(predictions.shape) > 1:
                 predictions = np.sum(predictions, 1).reshape(-1,1)
             else:
