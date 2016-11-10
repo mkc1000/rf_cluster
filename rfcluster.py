@@ -57,10 +57,8 @@ class RFCluster(object):
                 y_temp_var = np.sum(np.apply_along_axis(np.var, 0, y_temp))
                 var_reduction = (y_temp_var - mean_squared_error)/y_temp_var
                 weight = var_reduction**self.weight_extent
-                ##Alternative: based on min column forest predicts
-                min_feat_to_predict = np.min(features_to_predict)
-                var_min_feat_to_predict = np.var(X[:,min_feat_to_predict])
-                weight = (1/var_min_feat_to_predict)**self.weight_extent
+                ##Alternative: based on varience of features to predict
+                weight = y_temp_var
                 self.weights.append(weight)
             if len(predictions.shape) > 1:
                 predictions = np.sum(predictions, 1).reshape(-1,1)
