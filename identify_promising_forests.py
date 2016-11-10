@@ -34,7 +34,7 @@ def apply_over_multiple_lists(func, lists):
 n_forests = 600
 
 ks = range(2,8)
-forests_to_use = [np.random.choice(np.arange(n_forests), size=n_forests/2) for _ in range(10)]
+forests_to_use = [np.random.choice(np.arange(n_forests), size=n_forests/2) for _ in range(100)]
 
 def score(data_t, forests_to_use, k):
     print "Starting to score subset"
@@ -48,10 +48,13 @@ def score(data_t, forests_to_use, k):
     return scaled_within_cluster_variance
 
 if __name__ == '__main__':
+    print "Starting to build RFCluster."
     rfc = RFCluster(n_forests,1,0.5,5)
     data_t = rfc.fit_transform(data)
+    print "Done building RFCluster. Starting to pickle."
     with open('rfc.pkl', 'w') as f:
         pickle.dump(rfc, f)
+    print "Done pickling."
 
     def score_lite((k, forests_to_use)):
         return score(data_t, forests_to_use, k)
