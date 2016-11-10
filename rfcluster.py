@@ -60,7 +60,7 @@ class RFCluster(object):
                 ##Alternative: based on min column forest predicts
                 min_feat_to_predict = np.min(features_to_predict)
                 var_min_feat_to_predict = np.var(X[:,min_feat_to_predict])
-                weight = var_min_feat_to_predict**self.weight_extent
+                weight = (1/var_min_feat_to_predict)**self.weight_extent
                 self.weights.append(weight)
             if len(predictions.shape) > 1:
                 predictions = np.sum(predictions, 1).reshape(-1,1)
