@@ -37,12 +37,14 @@ ks = range(2,8)
 forests_to_use = [np.random.choice(np.arange(n_forests), size=n_forests/2) for _ in range(10)]
 
 def score(data_t, forests_to_use, k):
+    print "Starting to score subset"
     data = data_t[:,forests_to_use]
     jk = JKMeans(k, n_attempts=30)
     assignments = jk.fit_predict(data)
     mcv = mean_cluster_variances(assignments, target)
     total_variance = np.var(target)
     scaled_within_cluster_variance = mcv / total_variance
+    print "Done scoring subset"
     return scaled_within_cluster_variance
 
 if __name__ == '__main__':
