@@ -4,6 +4,7 @@ from within_cluster_variance import WCVScore
 from sklearn.cluster import DBSCAN
 from sklearn.pipeline import Pipeline
 from sklearn.datasets import load_boston, load_diabetes
+from joblib import Parallel, delayed   
 
 boston = load_boston()
 data = boston.data
