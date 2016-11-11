@@ -64,7 +64,7 @@ MODEL_PARAMS = {
     #         'n_clusters' : [2,3,4,5,6,7,8]
     #     }
     # },
-    'RFCluster' : {
+    'a_RFCluster' : {
         'model' : FullRFCluster,
         'parameters' : {
             'k' : [2,3,4,5,6,7,8,9,10],
