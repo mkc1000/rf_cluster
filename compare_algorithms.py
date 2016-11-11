@@ -31,7 +31,7 @@ MODEL_PARAMS = {
     'AffinityPropegation': {
         'model' : AffinityPropagation,
         'parameters' : {
-            'damping' : [0.5,1],
+            'damping' : [0.5,0.9],
             'convergence_iter' : [3,15]
         }
     },
