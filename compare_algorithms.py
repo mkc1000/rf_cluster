@@ -10,6 +10,29 @@ import cPickle as pickle
 from sklearn.datasets import load_boston, load_diabetes, load_iris, load_breast_cancer, fetch_rcv1
 #from sklearn.datasets.mldata import fetch_mldata
 
+class FullRFCluster(Pipeline):
+    def __init__(self, k,
+                n_forests=150,
+                n_trees=1,
+                n_features_to_predict=0.5,
+                max_depth=5,
+                using_weights=True,
+                weight_extent=1,
+                max_iter=None,
+                n_attempts=10):
+        rfc = RFCluster(n_forests,
+                        n_trees=n_trees,
+                        n_features_to_predict=n_features_to_predict,
+                        max_depth=max_depth,
+                        outputting_weights=using_weights,
+                        weight_extent=weight_extent)
+        jk = JKMeans(k,
+                        max_iter=max_iter,
+                        n_attempts=n_attempts,
+                        accepting_weights=using_weights)
+        Pipeline.__init__(self,[('rfc', rfc), ('jkmeans', jk)])
+
+
 MODEL_PARAMS = {
     'DBSCAN': {
         'model' : DBSCAN,
@@ -23,23 +46,34 @@ MODEL_PARAMS = {
         'parameters' : {
             'n_clusters': [2,3,4,5,6,7,8,9,10,11,12]
         }
-    # },
+    },
     # 'MeanShift': {
     #     'model' : MeanShift,
     #     'parameters' : {}
-    },
+    # },
     'AffinityPropegation': {
         'model' : AffinityPropagation,
         'parameters' : {
             'damping' : [0.75,0.76,0.77,0.78,0.79,0.8,0.825,0.85,0.9],
             'convergence_iter' : [1,2]
         }
-    # },
+    },
     # 'SpectralClustering': {
     #     'model' : SpectralClustering,
     #     'parameters' : {
     #         'n_clusters' : [2,3,4,5,6,7,8]
     #     }
+    # },
+    'RFCluster' : {
+        'model' : FullRFCluster,
+        'parameters' : {
+            'k' : [2,3,4,5,6,7,8,9,10],
+            'n_forests' : [150],
+            'n_trees' : [1,2],
+            'n_features_to_predict' : [0.3,0.5],
+            'max_depth' : [3,4,5,6],
+            'weight_extent' : [0.75,1,1.5,2,2.5]
+        }
     }
 }
 
