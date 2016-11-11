@@ -58,7 +58,7 @@ class RFCluster(object):
                 var_reduction = (y_temp_var - mean_squared_error)/y_temp_var
                 weight = var_reduction**self.weight_extent
                 ##Alternative: based on varience of features to predict
-                weight = y_temp_var**self.weight_extent
+                weight = (1/y_temp_var)**self.weight_extent
                 self.weights.append(weight)
             if len(predictions.shape) > 1:
                 predictions = np.sum(predictions, 1).reshape(-1,1)
