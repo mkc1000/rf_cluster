@@ -10,6 +10,12 @@ def mean_cluster_variances(clusters, feature):
         sizes.append(len(cluster_feature))
     return np.array(variances).dot(np.array(sizes))/len(feature)
 
+"""
+At some point, try making an object that can tune hyperparameters (of RFCluster and JKMeans)
+for a given dataset, by withholding a feature one at a time, running the whole model,
+and looking at wcv on that feature.
+"""
+
 class WCVScore(object):
     def __init__(self, model, sample=False):
         self.model = model

@@ -5,7 +5,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.metrics.pairwise import pairwise_distances
 
 class RFCluster(object):
-    def __init__(self, n_forests, n_trees=1, n_features_to_predict=0.5, max_depth=5, outputting_weights=False, weight_extent=1):
+    def __init__(self, n_forests, n_trees=1, n_features_to_predict=0.5, max_depth=5, outputting_weights=True, weight_extent=1):
         self.n_forests = n_forests
         self.n_trees = n_trees
         self.n_features_to_predict = n_features_to_predict
@@ -76,6 +76,22 @@ class RFCluster(object):
         self.fit(X_init)
         return self.transform(X_init)
 
+"""
+Maybe a Boosting Cluster would be worth trying. Instead of a bunch of forests being trained, a bunch of boosted models could be trained (with probably no more than a few trees apiece, and with shallow depths of course)
+"""
+
+"""
+Further thoughts for what to do with data_t (output of RFCluster.fit_transform)
+Consider which features have strong correlates with other features, and potentially reweight
+    *has at least n strong correlates
+    *how well the jaccard distances made from all the other features align with the jaccard distances made from just that feature (0's and 1's)
+For any two points, consider the features they share. If only those features existed, then for each of the two points, do other nearby points move closer or farther? If they move closer, the distance could be decreased directly, or those features they share could be given more weight for all points, or just for those two points.
+
+After an iteration of k-means, certain features, if weighted more heavily, would render points within clusters closer together. Weights on features could be adjusted iteratively, leading to new distance matrix every time.
+Alternatively, every point could have its own weighting of the various features, and to get the distance between two points, their weights would have to be averaged or something. In that case, for each cluster separately, different features might, if more heavily weighted, reduce within-cluster distance. Another option for how to deal with every point having its own set of weights over features: get the euclidean distances of points' weight vectors.
+A third option: each cluster could have its own weights on the importance of different features. When a new centroid point is chosen, new feature priorities are as well, and points are assigned according to which cluster, along with its priorities, it is the best match for. (This basically allows clusters to flatten and stretch along certain axes in this space)
+"""
+
 def jaccard(x,y):
     return np.mean(x!=y)
 
@@ -96,7 +112,7 @@ def weighted_jaccard_distance_matrix(X,w):
     return pairwise_distances(X_int, metric=wjaccard)
 
 class JKMeans(object):
-    def __init__(self, k, max_iter=None, n_attempts=10, accepting_weights=False):
+    def __init__(self, k, max_iter=None, n_attempts=10, accepting_weights=True):
         self.k = k
         self.n_attempts = n_attempts
         if max_iter is None:
