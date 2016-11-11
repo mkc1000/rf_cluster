@@ -71,8 +71,10 @@ def parameterized_models():
             yield model_name, model
 
 def score_model(model_name, model, data):
+    print "Starting to score " + model_name
     wcv = WCVScore(model)
     score, n_clusters = wcv.score(data)
+    print "Done scoring " + model_name
     return model_name, score, n_clusters
 
 if __name__ == '__main__':
