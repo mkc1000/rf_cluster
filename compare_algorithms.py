@@ -14,32 +14,32 @@ MODEL_PARAMS = {
     'DBSCAN': {
         'model' : DBSCAN,
         'parameters' : {
-            'eps' : [0.1,0.7],
-            'min_samples' : [2,10]
+            'eps' : [0.1,0.3,0.5,0.7],
+            'min_samples' : [2,4,6,8,10]
         }
     },
     'KMeans': {
         'model' : KMeans,
         'parameters' : {
-            'n_clusters': [2,12]
+            'n_clusters': [2,3,4,5,6,7,8,9,10,11,12]
         }
-    },
-    'MeanShift': {
-        'model' : MeanShift,
-        'parameters' : {}
+    # },
+    # 'MeanShift': {
+    #     'model' : MeanShift,
+    #     'parameters' : {}
     },
     'AffinityPropegation': {
         'model' : AffinityPropagation,
         'parameters' : {
-            'damping' : [0.5,0.9],
-            'convergence_iter' : [3,15]
+            'damping' : [0.5,0.6,0.7,0.8,0.9],
+            'convergence_iter' : [1,3,5,7,9,11,15]
         }
-    },
-    'SpectralClustering': {
-        'model' : SpectralClustering,
-        'parameters' : {
-            'n_clusters' : [2,12]
-        }
+    # },
+    # 'SpectralClustering': {
+    #     'model' : SpectralClustering,
+    #     'parameters' : {
+    #         'n_clusters' : [2,3,4,5,6,7,8]
+    #     }
     }
 }
 
