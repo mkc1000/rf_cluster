@@ -20,6 +20,7 @@ class WCVScore(object):
     def __init__(self, model, sample=False):
         self.model = model
         self.wcvs = []
+        self.n_clusters = []
         self.sample = sample
 
     def score(self, data):
@@ -32,8 +33,9 @@ class WCVScore(object):
             y = data[:,i]
             X = np.delete(data, i, axis=1)
             predictions = self.model.fit_predict(X)
+            self.n_clusters.append(len(np.unique(predictions)))
             within_cluster_variance = mean_cluster_variances(predictions, y)
             total_variance = np.var(y)
             scaled_within_cluster_variance = within_cluster_variance / total_variance
             self.wcvs.append(scaled_within_cluster_variance)
-        return np.mean(self.wcvs)
+        return np.mean(self.wcvs), np.mean(self.n_clusters)

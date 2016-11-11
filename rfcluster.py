@@ -82,9 +82,9 @@ Maybe a Boosting Cluster would be worth trying. Instead of a bunch of forests be
 
 """
 Further thoughts for what to do with data_t (output of RFCluster.fit_transform)
-Consider which features have strong correlates with other features, and potentially reweight
-    *has at least n strong correlates
-    *how well the jaccard distances made from all the other features align with the jaccard distances made from just that feature (0's and 1's)
+Any two features have a certain amount of mutual information between them.
+Consider which features have lots of mutual information with other features, and potentially reweight; if it has lots of mutual information with lots of other features, bump up, eg.
+For each feature, consider how well the jaccard distances among all the points made from all the other features align with the jaccard distances made from just that feature (0's and 1's)
 For any two points, consider the features they share. If only those features existed, then for each of the two points, do other nearby points move closer or farther? If they move closer, the distance could be decreased directly, or those features they share could be given more weight for all points, or just for those two points.
 
 After an iteration of k-means, certain features, if weighted more heavily, would render points within clusters closer together. Weights on features could be adjusted iteratively, leading to new distance matrix every time.
