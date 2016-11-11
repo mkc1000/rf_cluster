@@ -31,8 +31,8 @@ MODEL_PARAMS = {
     'AffinityPropegation': {
         'model' : AffinityPropagation,
         'parameters' : {
-            'damping' : [0.5,0.6,0.7,0.8,0.9],
-            'convergence_iter' : [1,3,5,7,9,11,15]
+            'damping' : [0.75,0.8,0.85,0.9],
+            'convergence_iter' : [1,2,3,4]
         }
     # },
     # 'SpectralClustering': {
