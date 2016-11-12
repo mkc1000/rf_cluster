@@ -64,15 +64,25 @@ MODEL_PARAMS = {
     #         'n_clusters' : [2,3,4,5,6,7,8]
     #     }
     # },
+    # 'AA_SLCluster' : {
+    #     'model' : FullSLCluster,
+    #     'parameters' : {
+    #         'k' : [2,3,4,5,6,7,8,9,10],
+    #         'n_forests' : [150],
+    #         'n_trees' : [1,2],
+    #         'n_features_to_predict' : [0.3,0.5],
+    #         'max_depth' : [3,4,5,6],
+    #         'weight_extent' : [0.75,1,1.5,2,2.5]
+    #     }
     'AA_SLCluster' : {
         'model' : FullSLCluster,
         'parameters' : {
             'k' : [2,3,4,5,6,7,8,9,10],
-            'n_forests' : [150],
-            'n_trees' : [1,2],
-            'n_features_to_predict' : [0.3,0.5],
-            'max_depth' : [3,4,5,6],
-            'weight_extent' : [0.75,1,1.5,2,2.5]
+            'n_forests' : [200],
+            'n_trees' : [1],
+            'n_features_to_predict' : [0.5],
+            'max_depth' : [3],
+            'weight_extent' : [1.5]
         }
     }
 }

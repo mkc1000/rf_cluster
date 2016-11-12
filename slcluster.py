@@ -4,7 +4,8 @@ from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics.pairwise import pairwise_distances
 from sklearn.metrics import mutual_info_score
-scipy.sparse.linalg import eigs
+from scipy.sparse.linalg import eigs
+from numpy.linalg import matrix_power
 
 class SLCluster(object):
     def __init__(self, n_forests, model_type='random_forest', n_trees=1, n_features_to_predict=0.5, max_depth=5, outputting_weights=True, weight_extent=1, learning_rate=0.9):
@@ -14,9 +15,9 @@ class SLCluster(object):
         self.outputting_weights = outputting_weights
         self.weight_extent = weight_extent
         self.model_type = model_type
-        if self.model_type = 'random_forest':
+        if self.model_type == 'random_forest':
             self.slms = [RandomForestRegressor(n_trees, max_depth=max_depth, n_jobs=-1) for _ in xrange(n_forests)]
-        elif self.model_type = 'gradient_boosting':
+        elif self.model_type == 'gradient_boosting':
             self.slms = [GradientBoostingRegressor(n_estimators=n_trees, learning_rate=learning_rate, max_depth=max_depth) for _ in xrange(n_forests)]
         else:
             raise ValueError("SLCluster.model_type must be 'random_forest' or 'gradient_boosting'.")
@@ -87,10 +88,8 @@ class SLCluster(object):
 
 """
 Further thoughts for what to do with data_t (output of SLCluster.fit_transform)
-Any two features have a certain amount of mutual information between them.
-Consider which features have lots of mutual information with other features, and potentially reweight; if it has lots of mutual information with lots of other features, bump up, eg.
 For each feature, consider how well the jaccard distances among all the points made from all the other features align with the jaccard distances made from just that feature (0's and 1's)
-For any two points, consider the features they share. If only those features existed, then for each of the two points, do other nearby points move closer or farther? If they move closer, the distance could be decreased directly, or those features they share could be given more weight for all points, or just for those two points.
+For any two points, consider the features they share. If only those features existed, then for each of the two points, do other nearby points move closer or farther? If they move closer, the distance could be decreased (there could be another matrix that gets added on top of the distance matrix as a correction)
 
 After an iteration of k-means, certain features, if weighted more heavily, would render points within clusters closer together. Weights on features could be adjusted iteratively, leading to new distance matrix every time.
 Alternatively, every point could have its own weighting of the various features, and to get the distance between two points, their weights would have to be averaged or something. In that case, for each cluster separately, different features might, if more heavily weighted, reduce within-cluster distance. Another option for how to deal with every point having its own set of weights over features: get the euclidean distances of points' weight vectors.
@@ -99,20 +98,30 @@ A third option: each cluster could have its own weights on the importance of dif
 If all the rest of this fails, just this part could be useful in itself. This is basically an ensemble strategy for clustering.
 """
 
-def mutual_info_matrix(X):
-    return pairwise_distances(X.T, metric=mutual_info_score)
+"""
+In picking a new centroid for jkmeans, it could be the point that minimizes sum(f(distance_to_other_points)) as opposed to sum(distance_to_other_points). Like, I don't know, f(x) = -log(1-x).
+"""
 
 class EigenvectorWeighting(object):
-    def __init__(self):
+    def __init__(self, complete=False, extent=1):
         self.data = None
         self.weights = None
+        self.complete = complete
+        self.extent = extent
 
     def fit(self, data, weights):
         self.data = data
-        mutual_info = mutual_info_matrix(data)
-        evals, evecs = eigs(mutual_info, k=1)
-        weights = evecs.reshape(-1)
-        self.weights = weights/np.sum(weights)
+        mutual_info_matrix = pairwise_distances(data.T, metric=mutual_info_score)
+        if self.complete:
+            evals, evecs = eigs(mutual_info_matrix, k=1)
+            weights = evecs.reshape(-1)
+            self.weights = weights/np.sum(weights)
+        else:
+            weights = weights.reshape(-1,1)
+            mutual_info_power = matrix_power(mutual_info_matrix, self.extent)
+            weights = mutual_info_power.dot(weights)
+            weights = weights.reshape(-1)
+            self.weights = weights/np.sum(weights)
 
     def fit_transform(self, data, weights):
         self.fit(data, weights)
@@ -147,7 +156,7 @@ def weighted_jaccard_distance_matrix(X,w):
     return pairwise_distances(X_int, metric=wjaccard)
 
 class JKMeans(object):
-    def __init__(self, k, max_iter=None, n_attempts=10, accepting_weights=True):
+    def __init__(self, k, max_iter=None, n_attempts=10, accepting_weights=True, weight_adjustment=0):
         self.k = k
         self.n_attempts = n_attempts
         if max_iter is None:
@@ -155,9 +164,12 @@ class JKMeans(object):
         else:
             self.max_iter = max_iter
         self.accepting_weights = accepting_weights
+        self.weight_adjustment = weight_adjustment
+        self.adjusting_weights = self.weight_adjustment != 0
         self.distance_matrix = None
         self.assignments = None
         self.assignment_score = None
+        self.weights = None
 
     def fit_once(self, X):
         assignments = np.random.randint(0,self.k,size=X.shape[0])
@@ -166,6 +178,7 @@ class JKMeans(object):
         while (old_assignments != assignments).any() and it != self.max_iter:
             it += 1
             old_assignments = assignments
+
             centroids = []
             for cluster in xrange(self.k):
                 mask = assignments == cluster
@@ -174,8 +187,15 @@ class JKMeans(object):
                 within_cluster_distance_matrix = (self.distance_matrix[mask]).T
                 most_central_point = np.argmin(np.sum(within_cluster_distance_matrix,1))
                 centroids.append(most_central_point)
-            to_centroid_distnace_matrix = (self.distance_matrix[centroids]).T
-            assignments = np.apply_along_axis(np.argmin, 1, to_centroid_distnace_matrix)
+
+            to_centroid_distance_matrix = (self.distance_matrix[centroids]).T
+            assignments = np.apply_along_axis(np.argmin, 1, to_centroid_distance_matrix)
+
+            if self.adjusting_weights:
+                weight_update = np.apply_along_axis(lambda col: mutual_info_score(assignments, col), 0, X)
+                weight_update = weight_update/np.sum(weight_update)
+                self.weights = self.weights*(1-self.weight_adjustment) + weight_update*self.weight_adjustment
+                self.distance_matrix = weighted_jaccard_distance_matrix(X, self.weights)
         return assignments
 
     def score(self, assignments):
@@ -187,15 +207,15 @@ class JKMeans(object):
             within_cluster_distance_matrix = (self.distance_matrix[mask]).T
             most_central_point = np.argmin(np.sum(within_cluster_distance_matrix,1))
             centroids.append(most_central_point)
-        to_centroid_distnace_matrix = (self.distance_matrix[centroids]).T
-        scores = np.apply_along_axis(np.min, 1, to_centroid_distnace_matrix)
+        to_centroid_distance_matrix = (self.distance_matrix[centroids]).T
+        scores = np.apply_along_axis(np.min, 1, to_centroid_distance_matrix)
         score = np.sum(scores)
         return score
 
     def fit(self, X):
         if self.accepting_weights:
-            X, weights = X
-            self.distance_matrix = weighted_jaccard_distance_matrix(X, weights)
+            X, self.weights = X
+            self.distance_matrix = weighted_jaccard_distance_matrix(X, self.weights)
         else:
             self.distance_matrix = jaccard_distance_matrix(X)
         for _ in xrange(self.n_attempts):
