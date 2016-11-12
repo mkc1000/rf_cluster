@@ -1,5 +1,5 @@
 import numpy as np
-from rfcluster import RFCluster, JKMeans
+from slcluster import SLCluster, JKMeans
 from within_cluster_variance import WCVScore
 from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import DBSCAN, KMeans, MeanShift, AffinityPropagation, SpectralClustering #, ward_tree
@@ -10,7 +10,7 @@ import cPickle as pickle
 from sklearn.datasets import load_boston, load_diabetes, load_iris, load_breast_cancer, fetch_rcv1
 #from sklearn.datasets.mldata import fetch_mldata
 
-class FullRFCluster(Pipeline):
+class FullSLCluster(Pipeline):
     def __init__(self, k,
                 n_forests=150,
                 n_trees=1,
@@ -20,7 +20,7 @@ class FullRFCluster(Pipeline):
                 weight_extent=1,
                 max_iter=None,
                 n_attempts=10):
-        rfc = RFCluster(n_forests,
+        slc = SLCluster(n_forests,
                         n_trees=n_trees,
                         n_features_to_predict=n_features_to_predict,
                         max_depth=max_depth,
@@ -30,7 +30,7 @@ class FullRFCluster(Pipeline):
                         max_iter=max_iter,
                         n_attempts=n_attempts,
                         accepting_weights=using_weights)
-        Pipeline.__init__(self,[('rfc', rfc), ('jkmeans', jk)])
+        Pipeline.__init__(self,[('slc', slc), ('jkmeans', jk)])
 
 
 MODEL_PARAMS = {
@@ -64,8 +64,8 @@ MODEL_PARAMS = {
     #         'n_clusters' : [2,3,4,5,6,7,8]
     #     }
     # },
-    'a_RFCluster' : {
-        'model' : FullRFCluster,
+    'AA_SLCluster' : {
+        'model' : FullSLCluster,
         'parameters' : {
             'k' : [2,3,4,5,6,7,8,9,10],
             'n_forests' : [150],
