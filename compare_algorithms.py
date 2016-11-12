@@ -34,13 +34,13 @@ class FullSLCluster(Pipeline):
 
 
 MODEL_PARAMS = {
-    'DBSCAN': {
-        'model' : DBSCAN,
-        'parameters' : {
-            'eps' : [0.1,0.3,0.5,0.7],
-            'min_samples' : [2,4,6,8,10]
-        }
-    },
+    # 'DBSCAN': {
+    #     'model' : DBSCAN,
+    #     'parameters' : {
+    #         'eps' : [0.1,0.3,0.5,0.7],
+    #         'min_samples' : [2,4,6,8,10]
+    #     }
+    # },
     'KMeans': {
         'model' : KMeans,
         'parameters' : {
