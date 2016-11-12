@@ -1,5 +1,5 @@
 import numpy as np
-from rfcluster import RFCluster, JKMeans
+from slcluster import SLCluster, JKMeans
 from within_cluster_variance import WCVScore
 from sklearn.cluster import DBSCAN
 from sklearn.pipeline import Pipeline
@@ -12,15 +12,15 @@ boston = load_boston()
 data = boston.data
 
 # dbscan = DBSCAN(13, 7)
-# rfc_dbscan = Pipeline([('rfc', RFCluster(50,3,0.2,5)), ('jkmeans', JKMeans(5, n_attempts=30))])
+# slc_dbscan = Pipeline([('slc', SLCluster(50,3,0.2,5)), ('jkmeans', JKMeans(5, n_attempts=30))])
 #
-# print rfc_dbscan.fit_predict(data)
+# print slc_dbscan.fit_predict(data)
 #
 # wcv_dbscan = WCVScore(dbscan)
-# wcv_rfc_dbscan = WCVScore(rfc_dbscan, sample=0.5)
+# wcv_slc_dbscan = WCVScore(slc_dbscan, sample=0.5)
 #
 # print wcv_dbscan.score(data)
-# print wcv_rfc_dbscan.score(data)
+# print wcv_slc_dbscan.score(data)
 
 n_trees = [5,6,7,8]
 n_features_to_predict = [0.1,0.3,0.5]
@@ -36,8 +36,8 @@ with open('log.csv', 'a') as f:
     for n_tree in n_trees:
         for n_feature_to_predict in n_features_to_predict:
             for max_dep in max_depth:
-                rfc = Pipeline([('rfc', RFCluster(60,n_tree,n_feature_to_predict,max_dep)), ('jkmeans', JKMeans(5, n_attempts=6))])
-                wcv = WCVScore(rfc)
+                slc = Pipeline([('slc', SLCluster(60,n_tree,n_feature_to_predict,max_dep)), ('jkmeans', JKMeans(5, n_attempts=6))])
+                wcv = WCVScore(slc)
                 score = wcv.score(data)
                 tup = (n_tree,n_feature_to_predict,max_dep,score)
                 log.append(tup)
