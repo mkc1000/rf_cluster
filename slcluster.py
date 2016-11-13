@@ -127,15 +127,6 @@ class EigenvectorWeighting(object):
         self.fit(data, weights)
         return self.data, self.weights
 
-class WeightRejiggerrer(object):
-    def __init__(self):
-        self.data = None
-        self.weights = None
-
-    def fit(self, data, weights):
-        self.data = data
-        self.weights = weights
-
 def jaccard(x,y):
     return np.mean(x!=y)
 

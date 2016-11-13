@@ -74,7 +74,7 @@ MODEL_PARAMS = {
     #         'max_depth' : [3,4,5,6],
     #         'weight_extent' : [0.75,1,1.5,2,2.5]
     #     }
-    'AA_SLCluster' : {
+    'SLCluster' : {
         'model' : FullSLCluster,
         'parameters' : {
             'k' : [2,3,4,5,6,7,8,9,10],
@@ -122,7 +122,7 @@ def score_model(model_name, model, data):
     return model_name, score, n_clusters
 
 if __name__ == '__main__':
-    data = load_boston().data
+    data = load_breast_cancer().data
     ss = StandardScaler()
     data_ss = ss.fit_transform(data)
     models = parameterized_models()
