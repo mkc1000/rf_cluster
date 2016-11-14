@@ -84,12 +84,12 @@ MODEL_PARAMS = {
     'SLCluster' : {
         'model' : FullSLCluster,
         'parameters' : {
-            'k' : [3,7],
-            'n_forests' : [100,200],
+            'k' : [3,5,7],
+            'n_forests' : [150],
             'n_trees' : [1],
             'n_features_to_predict' : [0.5],
             'max_depth' : [3],
-            'weight_extent' : [1.5],
+            'weight_extent' : [0.5,1,1.5],
             'eig_extent': [0,1,2,4]
         }
     }
