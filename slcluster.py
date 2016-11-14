@@ -183,7 +183,7 @@ def weighted_jaccard_distance_matrix(X,w):
     return pairwise_distances(X_int, metric=wjaccard)
 
 class JKMeans(object):
-    def __init__(self, k, max_iter=None, n_attempts=10, accepting_weights=True, weight_adjustment=0):
+    def __init__(self, k, max_iter=100, n_attempts=10, accepting_weights=True, weight_adjustment=0):
         self.k = k
         self.n_attempts = n_attempts
         if max_iter is None:

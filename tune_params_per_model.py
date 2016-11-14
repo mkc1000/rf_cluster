@@ -12,7 +12,7 @@ SLC_PARAMS = {
         'n_features_to_predict' : [0.5],
         'max_depth' : [3],
         'weight_extent' : [1,1.5],
-        'weight_adjustment' : [0,0.2,0.5,1]
+        'weight_adjustment' : [0]
     }
 
 def test_params(param_dict, data):

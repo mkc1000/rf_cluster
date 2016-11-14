@@ -12,10 +12,12 @@ from sklearn.datasets import load_boston, load_diabetes, load_iris, load_breast_
 
 class FullSLCluster(Pipeline):
     def __init__(self, k,
+                model_type='gradient_boosting'
                 n_forests=150,
                 n_trees=1,
                 n_features_to_predict=0.5,
                 max_depth=5,
+                learning_rate=0.9
                 using_weights=True,
                 weight_extent=1,
                 max_iter=None,
@@ -23,11 +25,13 @@ class FullSLCluster(Pipeline):
                 weight_adjustment=0,
                 eig_extent=0):
         slc = SLCluster(n_forests,
+                        model_type=model_type,
                         n_trees=n_trees,
                         n_features_to_predict=n_features_to_predict,
                         max_depth=max_depth,
                         outputting_weights=using_weights,
-                        weight_extent=weight_extent)
+                        weight_extent=weight_extent,
+                        learning_rate=learning_rate)
         ew = EigenvectorWeighting(extent=eig_extent)
         jk = JKMeans(k,
                         max_iter=max_iter,
@@ -86,11 +90,12 @@ MODEL_PARAMS = {
         'parameters' : {
             'k' : [3,5,7],
             'n_forests' : [150],
-            'n_trees' : [1],
+            'n_trees' : [2],
             'n_features_to_predict' : [0.5],
-            'max_depth' : [3],
-            'weight_extent' : [0.5,1,1.5],
-            'eig_extent': [0,1,2,4]
+            'max_depth' : [2,3],
+            'weight_extent' : [0.5,1,1.5,2],
+            'learning_rate' : [0.2,0.4,0.6,0.8,1]
+            #'eig_extent': [0,1,2,4]
         }
     }
 }
@@ -135,5 +140,5 @@ if __name__ == '__main__':
     data_ss = ss.fit_transform(data)
     models = parameterized_models()
     output = Parallel(n_jobs=-1)(delayed(score_model)(model_name, model, data_ss) for model_name, model in models)
-    with open('model_compare_w_eig.pkl','w') as f:
+    with open('model_compare_boost.pkl','w') as f:
         pickle.dump(output, f)

@@ -13,14 +13,15 @@ def plot_hists_feature(feat, X_series):
     plt.show()
 
 if __name__ == '__main__':
-    with open('model_compare.pkl','r') as f:
+    with open('model_compare_w_eig.pkl','r') as f:
         models = pickle.load(f)
-    with open('params_model_compare.pkl','r') as f:
+    with open('params_model_compare_w_eig.pkl','r') as f:
         params = pickle.load(f)
-    models, params = models[-720:], params[-720:]
+    #models, params = models[-720:], params[-720:]
+    models = models[:36]
     models = np.array([[tup[1],tup[2]] for tup in models])
-    params_columns = params[0][1].keys() + ['n_clusters']
-    params = np.array([tup[1].values() for tup in params])
+    #params_columns = params[0][1].keys() + ['n_clusters']
+    params = np.array([d.values() for d in params])
     X = np.hstack((params,models[:,1].reshape(-1,1)))
     y = models[:,0]
     lr = LinearRegression()
