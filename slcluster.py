@@ -48,6 +48,8 @@ class SLCluster(object):
             features_to_predict = np.random.choice(np.arange(X.shape[1]),(n_output,),replace=False)
             self.features_indices.append(features_to_predict)
             y_temp = X[:, features_to_predict]
+            if self.model_type == 'gradient_boosting':
+                y_temp = np.apply_along_axis(np.mean,1,y_temp)
             X_temp = np.delete(X, features_to_predict, axis=1)
             self.slms[i].fit(X_temp, y_temp)
 
