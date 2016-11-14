@@ -154,6 +154,10 @@ class EigenvectorWeighting(object):
             weights = weights.reshape(-1)
             self.weights = weights/np.sum(weights)
 
+    def transform(self, data, weights):
+        self.fit(data, weights)
+        return self.data, self.weights
+
     def fit_transform(self, data, weights):
         self.fit(data, weights)
         return self.data, self.weights
