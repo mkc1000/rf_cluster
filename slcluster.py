@@ -104,19 +104,19 @@ class SLCluster(object):
 #                 return weight
 #             self.weights = Parallel(n_jobs=self.n_jobs)(delayed(get_weight)(self,X,features_to_predict) for features_to_predict in self.features_indices)
 #         ##################
-#
-#         if not self.outputting_weights:
-#             return self.decision_paths
-#         else:
-#             self.weights = np.array(self.weights)
-#             self.weights = self.weights/np.sum(self.weights)
-#             return self.decision_paths, self.weights
-#
-#     def fit_transform(self, X_init, _=None):
-#         self.fit(X_init)
-#         return self.transform(X_init)
-#
-#
+
+        if not self.outputting_weights:
+            return self.decision_paths
+        else:
+            self.weights = np.array(self.weights)
+            self.weights = self.weights/np.sum(self.weights)
+            return self.decision_paths, self.weights
+
+    def fit_transform(self, X_init, _=None):
+        self.fit(X_init)
+        return self.transform(X_init)
+
+
 # """
 # Further thoughts for what to do with data_t (output of SLCluster.fit_transform)
 # For each feature, consider how well the jaccard distances among all the points made from all the other features align with the jaccard distances made from just that feature (0's and 1's)
