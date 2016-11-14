@@ -1,5 +1,5 @@
 import numpy as np
-from slcluster import SLCluster, JKMeans
+from slcluster import SLCluster, JKMeans, EigenvectorWeighting
 from within_cluster_variance import WCVScore
 from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import DBSCAN, KMeans, MeanShift, AffinityPropagation, SpectralClustering #, ward_tree
@@ -20,19 +20,24 @@ class FullSLCluster(Pipeline):
                 weight_extent=1,
                 max_iter=None,
                 n_attempts=10,
-                weight_adjustment=0):
+                weight_adjustment=0,
+                eig_extent=0):
         slc = SLCluster(n_forests,
                         n_trees=n_trees,
                         n_features_to_predict=n_features_to_predict,
                         max_depth=max_depth,
                         outputting_weights=using_weights,
                         weight_extent=weight_extent)
+        ew = EigenvectorWeighting(extent=eig_extent)
         jk = JKMeans(k,
                         max_iter=max_iter,
                         n_attempts=n_attempts,
                         accepting_weights=using_weights,
                         weight_adjustment=weight_adjustment)
-        Pipeline.__init__(self,[('slc', slc), ('jkmeans', jk)])
+        if eig_extent == 0:
+            Pipeline.__init__(self,[('slc', slc), ('jkmeans', jk)])
+        else:
+            Pipeline.__init__(self,[('slc', slc), ('ew', ew), ('jkmeans', jk)])
 
 
 MODEL_PARAMS = {
@@ -46,20 +51,20 @@ MODEL_PARAMS = {
     'KMeans': {
         'model' : KMeans,
         'parameters' : {
-            'n_clusters': [2,3,4,5,6,7,8,9,10,11,12]
+            'n_clusters': [2,3,4,5,6,7]
         }
     },
     # 'MeanShift': {
     #     'model' : MeanShift,
     #     'parameters' : {}
     # },
-    'AffinityPropegation': {
-        'model' : AffinityPropagation,
-        'parameters' : {
-            'damping' : [0.75,0.76,0.77,0.78,0.79,0.8,0.825,0.85,0.9],
-            'convergence_iter' : [1,2]
-        }
-    },
+    # 'AffinityPropegation': {
+    #     'model' : AffinityPropagation,
+    #     'parameters' : {
+    #         'damping' : [0.75,0.76,0.77,0.78,0.79,0.8,0.825,0.85,0.9],
+    #         'convergence_iter' : [1,2]
+    #     }
+    # },
     # 'SpectralClustering': {
     #     'model' : SpectralClustering,
     #     'parameters' : {
@@ -79,12 +84,13 @@ MODEL_PARAMS = {
     'SLCluster' : {
         'model' : FullSLCluster,
         'parameters' : {
-            'k' : [2,3,4,5,6,7,8,9,10],
-            'n_forests' : [200],
+            'k' : [3,5,7],
+            'n_forests' : [150],
             'n_trees' : [1],
             'n_features_to_predict' : [0.5],
             'max_depth' : [3],
-            'weight_extent' : [1.5]
+            'weight_extent' : [0.5,1,1.5],
+            'eig_extent': [0,1,2,4]
         }
     }
 }
@@ -129,5 +135,5 @@ if __name__ == '__main__':
     data_ss = ss.fit_transform(data)
     models = parameterized_models()
     output = Parallel(n_jobs=-1)(delayed(score_model)(model_name, model, data_ss) for model_name, model in models)
-    with open('small_model_compare.pkl','w') as f:
+    with open('model_compare_w_eig.pkl','w') as f:
         pickle.dump(output, f)
