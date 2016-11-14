@@ -19,7 +19,8 @@ class FullSLCluster(Pipeline):
                 using_weights=True,
                 weight_extent=1,
                 max_iter=None,
-                n_attempts=10):
+                n_attempts=10,
+                weight_adjustment=0):
         slc = SLCluster(n_forests,
                         n_trees=n_trees,
                         n_features_to_predict=n_features_to_predict,
@@ -29,7 +30,8 @@ class FullSLCluster(Pipeline):
         jk = JKMeans(k,
                         max_iter=max_iter,
                         n_attempts=n_attempts,
-                        accepting_weights=using_weights)
+                        accepting_weights=using_weights,
+                        weight_adjustment=weight_adjustment)
         Pipeline.__init__(self,[('slc', slc), ('jkmeans', jk)])
 
 
