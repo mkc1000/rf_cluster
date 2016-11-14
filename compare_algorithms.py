@@ -12,7 +12,7 @@ from sklearn.datasets import load_boston, load_diabetes, load_iris, load_breast_
 
 class FullSLCluster(Pipeline):
     def __init__(self, k,
-                model_type='gradient_boosting'
+                model_type='gradient_boosting',
                 n_forests=150,
                 n_trees=1,
                 n_features_to_predict=0.5,
