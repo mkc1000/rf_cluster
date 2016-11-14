@@ -17,7 +17,7 @@ class FullSLCluster(Pipeline):
                 n_trees=1,
                 n_features_to_predict=0.5,
                 max_depth=5,
-                learning_rate=0.9
+                learning_rate=0.9,
                 using_weights=True,
                 weight_extent=1,
                 max_iter=None,
