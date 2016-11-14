@@ -140,7 +140,8 @@ class EigenvectorWeighting(object):
         self.complete = complete
         self.extent = extent
 
-    def fit(self, data, weights):
+    def fit(self, data):
+        data, weights = data
         self.data = data
         mutual_info_matrix = pairwise_distances(data.T, metric=mutual_info_score)
         if self.complete:
@@ -154,12 +155,12 @@ class EigenvectorWeighting(object):
             weights = weights.reshape(-1)
             self.weights = weights/np.sum(weights)
 
-    def transform(self, data, weights):
-        self.fit(data, weights)
+    def transform(self, data, _=None):
+        self.fit(data)
         return self.data, self.weights
 
-    def fit_transform(self, data, weights):
-        self.fit(data, weights)
+    def fit_transform(self, data, _=None):
+        self.fit(data)
         return self.data, self.weights
 
 def jaccard(x,y):
