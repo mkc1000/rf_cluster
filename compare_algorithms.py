@@ -12,15 +12,15 @@ from sklearn.datasets import load_boston, load_diabetes, load_iris, load_breast_
 
 class FullSLCluster(Pipeline):
     def __init__(self, k,
-                model_type='gradient_boosting',
+                model_type='random_forest',
                 n_forests=150,
                 n_trees=1,
                 n_features_to_predict=0.5,
-                max_depth=5,
-                learning_rate=0.9,
+                max_depth=5, #should be 2 for boosting
+                learning_rate=0.6,
                 using_weights=True,
-                weight_extent=1,
-                max_iter=None,
+                weight_extent=1, # 2 for boosting
+                max_iter=60,
                 n_attempts=10,
                 weight_adjustment=0,
                 eig_extent=0):

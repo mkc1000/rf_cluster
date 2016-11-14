@@ -4,18 +4,23 @@ from compare_algorithms import grid_search, FullSLCluster
 from within_cluster_variance import WCVScore, mean_cluster_variances
 from sklearn.datasets import load_boston, load_diabetes, load_iris, load_breast_cancer, fetch_rcv1
 from joblib import Parallel, delayed
+import random
+from datetime import datetime
 
 SLC_PARAMS = {
-        'k' : [4,7],
+        'k' : [4,6,7],
         'n_forests' : [150],
         'n_trees' : [1],
         'n_features_to_predict' : [0.5],
-        'max_depth' : [3],
-        'weight_extent' : [1,1.5],
-        'weight_adjustment' : [0]
+        'max_depth' : [3,5,8,10],
+        'weight_extent' : [1,1.5,2,2.5],
+        'eig_extent' : [0,3,6,10]
     }
 
 def test_params(param_dict, data):
+    random.seed(datetime.now())
+    np.random.seed(random.randint(0,100000))
+    print "Testing randomizer: ", np.random.choice(np.arange(10))
     print "starting to test ", param_dict
     features_to_withhold = np.random.choice(np.arange(data.shape[1]),2)
     y = data[:,features_to_withhold]

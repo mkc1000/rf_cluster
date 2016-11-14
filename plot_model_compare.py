@@ -14,5 +14,5 @@ def plot(filename):
 
 
 if __name__ == '__main__':
-    filename = 'small_model_compare.pkl'
+    filename = 'model_compare_boost.pkl'
     plot(filename)
