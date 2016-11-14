@@ -30,7 +30,7 @@ class SLCluster(object):
         if outputting_weights:
             self.weights = []
 
-    def fit(self, X_init):
+    def fit(self, X_init, _=None):
         self.features_indices = []
 
         X_ss = self.ss1.fit_transform(X_init)
