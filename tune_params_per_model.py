@@ -40,3 +40,7 @@ if __name__ == '__main__':
     outputs = []
     for data in datasets:
         outputs.append( Parallel(n_jobs=-1)(delayed(test_params)(param_dict, data) for param_dict in params_list) )
+    with open('big_tune_params_by_model.pkl','w') as f:
+        pickle.dump(outputs, f)
+    with open('big_tune_params.pkl','w') as f:
+        pickle.dump(params_list,f)
