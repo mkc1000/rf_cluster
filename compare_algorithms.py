@@ -1,5 +1,5 @@
 import numpy as np
-from slcluster import SLCluster, JKMeans, EigenvectorWeighting
+from slcluster import SLCluster, JKMeans, EigenvectorWeighting, SquishyJKMeans
 from within_cluster_variance import WCVScore
 from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import DBSCAN, KMeans, MeanShift, AffinityPropagation, SpectralClustering #, ward_tree
@@ -13,6 +13,7 @@ from sklearn.datasets import load_boston, load_diabetes, load_iris, load_breast_
 class FullSLCluster(Pipeline):
     def __init__(self, k,
                 model_type='random_forest',
+                kmeans_type='normal',
                 n_forests=150,
                 n_trees=1,
                 n_features_to_predict=0.5,
@@ -35,12 +36,20 @@ class FullSLCluster(Pipeline):
                         learning_rate=learning_rate,
                         n_jobs=n_jobs)
         ew = EigenvectorWeighting(extent=eig_extent)
-        jk = JKMeans(k,
-                        max_iter=max_iter,
-                        n_attempts=n_attempts,
-                        accepting_weights=using_weights,
-                        weight_adjustment=weight_adjustment,
-                        n_jobs=n_jobs)
+        if kmeans_type == 'normal':
+            jk = JKMeans(k,
+                            max_iter=max_iter,
+                            n_attempts=n_attempts,
+                            accepting_weights=using_weights,
+                            weight_adjustment=weight_adjustment,
+                            n_jobs=n_jobs)
+        else:
+            jk = SquishyJKMeans(k,
+                            max_iter=max_iter,
+                            n_attempts=n_attempts,
+                            accepting_weights=using_weights,
+                            weight_adjustment=weight_adjustment,
+                            n_jobs=n_jobs)
         if eig_extent == 0:
             Pipeline.__init__(self,[('slc', slc), ('jkmeans', jk)])
         else:
