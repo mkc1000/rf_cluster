@@ -175,22 +175,26 @@ def weighted_jaccard(x,y,w):
     """w is list of weights, same length as x and y summing to 1"""
     return (x!=y).dot(w)
 
-def jaccard_distance_matrix(X):
+def jaccard_distance_matrix(X, n_jobs=1):
     vint = np.vectorize(int)
     X_int = vint(X*100)
-    return pairwise_distances(X_int, metric=jaccard)
+    return pairwise_distances(X_int, metric=jaccard, n_jobs=n_jobs)
 
-def weighted_jaccard_distance_matrix(X,w):
+def weighted_jaccard_distance_matrix(X, w, n_jobs=1):
     """w has length X.shape[1]"""
     vint = np.vectorize(int)
     X_int = vint(X*100)
     wjaccard = lambda x,y: weighted_jaccard(x,y,w)
-    return pairwise_distances(X_int, metric=wjaccard)
+    print "starting to make distance matrix"
+    distance_matrix = pairwise_distances(X_int, metric=wjaccard,n_jobs=n_jobs)
+    print "done making distance matrix"
+    return distance_matrix
 
 class JKMeans(object):
-    def __init__(self, k, max_iter=100, n_attempts=10, accepting_weights=True, weight_adjustment=0):
+    def __init__(self, k, max_iter=100, n_attempts=10, accepting_weights=True, weight_adjustment=0, n_jobs=1):
         self.k = k
         self.n_attempts = n_attempts
+        self.n_jobs=n_jobs
         if max_iter is None:
             self.max_iter = -1
         else:
@@ -247,9 +251,9 @@ class JKMeans(object):
     def fit(self, X):
         if self.accepting_weights:
             X, self.weights = X
-            self.distance_matrix = weighted_jaccard_distance_matrix(X, self.weights)
+            self.distance_matrix = weighted_jaccard_distance_matrix(X, self.weights, self.n_jobs)
         else:
-            self.distance_matrix = jaccard_distance_matrix(X)
+            self.distance_matrix = jaccard_distance_matrix(X, self.n_jobs)
         for _ in xrange(self.n_attempts):
             assignments = self.fit_once(X)
             if self.assignments is None:

@@ -39,7 +39,8 @@ class FullSLCluster(Pipeline):
                         max_iter=max_iter,
                         n_attempts=n_attempts,
                         accepting_weights=using_weights,
-                        weight_adjustment=weight_adjustment)
+                        weight_adjustment=weight_adjustment,
+                        n_jobs=n_jobs)
         if eig_extent == 0:
             Pipeline.__init__(self,[('slc', slc), ('jkmeans', jk)])
         else:
