@@ -1,9 +1,11 @@
 import numpy as np
 from sklearn.datasets import fetch_mldata
 from compare_algorithms import FullSLCluster
+import cPickle as pickle
 
 if __name__ == '__main__':
-    mnist = fetch_mldata('MNIST original')
+    with open('mnist.pkl','r') as f:
+        mnist = pickle.load(f)
     X = mnist.data
     numerals = mnist.target
     slc = FullSLCluster(k=10,
