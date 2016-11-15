@@ -22,8 +22,8 @@ class MaxMutualInfo(object):
             for cluster in xrange(self.k):
                 possible_assignments = self.assignments.copy()
                 possible_assignments[point] = cluster
-                mutual_infos = np.apply_along_axis(lambda col: mutual_info_score(col, possible_assignments), 0, data)
-                weighted_mean_mi = mutual_infos.dot(self.weights)
+                all_mutual_infos = np.apply_along_axis(lambda col: mutual_info_score(col, possible_assignments), 0, self.data)
+                weighted_mean_mi = all_mutual_infos.dot(self.weights)
                 mutual_infos.append(weighted_mean_mi)
             best = np.argmax(np.array(mutual_infos))
             self.assignments[point] = best
