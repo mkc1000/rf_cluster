@@ -8,6 +8,31 @@ from scipy.sparse.linalg import eigs
 from numpy.linalg import matrix_power
 from joblib import Parallel, delayed
 
+def fit_sl_model(slcluster, X, i, features_to_predict):
+    print "starting to fit model"
+    y_temp = X[:, features_to_predict]
+    X_temp = np.delete(X, features_to_predict, axis=1)
+    slcluster.slms[i].fit(X_temp, y_temp)
+    print "done fitting model"
+
+def get_predictions(slcluster, X, i, features_to_predict):
+    print "starting to transform data"
+    y_temp = X[:, features_to_predict]
+    X_temp = np.delete(X, features_to_predict, axis=1)
+    predictions = slcluster.slms[i].predict(X_temp)
+    if len(predictions.shape) > 1:
+        predictions = np.sum(predictions, 1).reshape(-1,1)
+    else:
+        predictions = predictions.reshape(-1,1)
+    return predictions
+
+def get_weight(slcluster, X, features_to_predict):
+    y_temp = X[:, features_to_predict]
+    y_temp_var = np.sum(np.apply_along_axis(np.var, 0, y_temp))
+    weight = (1/y_temp_var)**slcluster.weight_extent
+    print "done transforming data"
+    return weight
+
 class SLCluster(object):
     def __init__(self, n_forests, model_type='random_forest', n_trees=1, n_features_to_predict=0.5, max_depth=5, outputting_weights=True, weight_extent=1, learning_rate=0.9, n_jobs=1):
         self.n_forests = n_forests
@@ -55,12 +80,12 @@ class SLCluster(object):
             # self.slms[i].fit(X_temp, y_temp)
 
         ##################
-        def fit_sl_model(slcluster, X, i, features_to_predict):
-            print "starting to fit model"
-            y_temp = X[:, features_to_predict]
-            X_temp = np.delete(X, features_to_predict, axis=1)
-            slcluster.slms[i].fit(X_temp, y_temp)
-            print "done fitting model"
+        # def fit_sl_model(slcluster, X, i, features_to_predict):
+        #     print "starting to fit model"
+        #     y_temp = X[:, features_to_predict]
+        #     X_temp = np.delete(X, features_to_predict, axis=1)
+        #     slcluster.slms[i].fit(X_temp, y_temp)
+        #     print "done fitting model"
         Parallel(n_jobs=self.n_jobs)(delayed(fit_sl_model)(self, X, i, features_to_predict) for i, features_to_predict in enumerate(self.features_indices))
         ##################
 
@@ -90,25 +115,25 @@ class SLCluster(object):
         #         self.decision_paths = np.hstack((self.decision_paths, predictions))
 
         ##################
-        def get_predictions(slcluster, X, i, features_to_predict):
-            print "starting to transform data"
-            y_temp = X[:, features_to_predict]
-            X_temp = np.delete(X, features_to_predict, axis=1)
-            predictions = slcluster.slms[i].predict(X_temp)
-            if len(predictions.shape) > 1:
-                predictions = np.sum(predictions, 1).reshape(-1,1)
-            else:
-                predictions = predictions.reshape(-1,1)
-            return predictions
+        # def get_predictions(slcluster, X, i, features_to_predict):
+        #     print "starting to transform data"
+        #     y_temp = X[:, features_to_predict]
+        #     X_temp = np.delete(X, features_to_predict, axis=1)
+        #     predictions = slcluster.slms[i].predict(X_temp)
+        #     if len(predictions.shape) > 1:
+        #         predictions = np.sum(predictions, 1).reshape(-1,1)
+        #     else:
+        #         predictions = predictions.reshape(-1,1)
+        #     return predictions
         self.decsion_paths = np.hstack(Parallel(n_jobs=self.n_jobs)(delayed(get_predictions)(self,X,i,features_to_predict) for i, features_to_predict in enumerate(self.features_indices)))
 
         if self.outputting_weights:
-            def get_weight(slcluster, X, features_to_predict):
-                y_temp = X[:, features_to_predict]
-                y_temp_var = np.sum(np.apply_along_axis(np.var, 0, y_temp))
-                weight = (1/y_temp_var)**slcluster.weight_extent
-                print "done transforming data"
-                return weight
+            # def get_weight(slcluster, X, features_to_predict):
+            #     y_temp = X[:, features_to_predict]
+            #     y_temp_var = np.sum(np.apply_along_axis(np.var, 0, y_temp))
+            #     weight = (1/y_temp_var)**slcluster.weight_extent
+            #     print "done transforming data"
+            #     return weight
             self.weights = Parallel(n_jobs=self.n_jobs)(delayed(get_weight)(self,X,features_to_predict) for features_to_predict in self.features_indices)
         ##################
 
