@@ -27,8 +27,9 @@ def test_params(param_dict, data):
     try:
         wcv_score2, _ = wcv2.score(data),
     except:
-        print "Sssssssh."
-        return 0,0
+        print param_dict
+        print wcv2.wcvs
+        return wcv_score1, 0
     print "done testing ", param_dict
     return wcv_score1, wcv_score2
 
