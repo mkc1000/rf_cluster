@@ -24,7 +24,11 @@ def test_params(param_dict, data):
     wcv_score1, _ = wcv1.score(data)
     slc2 = FullSLCluster(**param_dict)
     wcv2 = WCVScore(slc2)
-    wcv_score2, _ = wcv2.score(data),
+    try:
+        wcv_score2, _ = wcv2.score(data),
+    except:
+        print "Sssssssh."
+        return 0,0
     print "done testing ", param_dict
     return wcv_score1, wcv_score2
 

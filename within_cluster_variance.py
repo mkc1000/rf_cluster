@@ -42,17 +42,7 @@ class WCVScore(object):
         output = np.array(output)
         self.wcvs = output[:,0]
         self.n_clusters = output[:,1]
-        #return np.mean(self.wcvs), np.mean(self.n_clusters)
-        ##JANKY FIX
-        try:
-            output = np.mean(self.wcvs), np.mean(self.n_clusters)
-            wcv_score, n_clusts = output
-            return np.mean(self.wcvs), np.mean(self.n_clusters)
-        except:
-            return 0, 0
-            print "Sssssssssssssssssssssssh"
-            print output
-
+        return np.mean(self.wcvs), np.mean(self.n_clusters)
 
 # class WCVScore(object):
 #     def __init__(self, model, sample=False):
