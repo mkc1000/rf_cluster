@@ -182,12 +182,6 @@ def jaccard_distance_matrix(X, n_jobs=1):
     X_int = vint(X*100)
     return pairwise_distances(X_int, metric=jaccard, n_jobs=n_jobs)
 
-# class wjacacrd(object):
-#     "Necessary for parallelizing. Can't pickle a lambda function."
-#     def __init__(self,w):
-#         self.w = w
-#     def wjaccard(x,y)
-
 def weighted_jaccard_distance_matrix(X, w, n_jobs=1):
     """w has length X.shape[1]"""
     vint = np.vectorize(int)
@@ -278,7 +272,7 @@ class JKMeans(object):
         return self.assignments
 
 class SquishyJKMeans(object):
-    def __init__(self, k, max_iter=100, n_attempts=10, accepting_weights=True, weight_adjustment=0):
+    def __init__(self, k, max_iter=100, n_attempts=10, accepting_weights=True, weight_adjustment=0, n_jobs=1):
         self.k = k
         self.n_attempts = n_attempts
         if max_iter is None:
@@ -289,6 +283,7 @@ class SquishyJKMeans(object):
         self.to_centroid_distances = None
         self.assignments = None
         self.assignment_score = None
+        self.n_jobs=n_jobs
 
     def fit_once(self, X):
         assignments = np.random.randint(0,self.k,size=X.shape[0])
@@ -305,16 +300,18 @@ class SquishyJKMeans(object):
                 mask = assignments == cluster
                 if np.sum(mask) == 0:
                     continue
-                weights = np.apply_along_axis(lambda col: mutual_info_score(mask, col), 0, X)
-                distance_matrix = weighted_jaccard_distance_matrix(X, weights)
                 if first_run:
                     distance_matrix = self.distance_matrix
+                else:
+                    weights = np.apply_along_axis(lambda col: mutual_info_score(mask, col), 0, X)
+                    weights = weights/np.sum(weights)
+                    distance_matrix = weighted_jaccard_distance_matrix(X, weights, n_jobs=self.n_jobs)
                 within_cluster_distance_matrix = (distance_matrix[mask]).T
                 most_central_point = np.argmin(np.sum(within_cluster_distance_matrix,1))
                 centroids.append(most_central_point)
-                self.to_centroid_distances.append(distance_matrix[:,most_central_point].reshape(-1,1))
+                self.to_centroid_distances.append(distance_matrix[:,most_central_point].reshape(-1))
 
-            to_centroid_distance_matrix = np.hstack(self.to_centroid_distances)
+            to_centroid_distance_matrix = (np.array(self.to_centroid_distances)).T
             assignments = np.apply_along_axis(np.argmin, 1, to_centroid_distance_matrix)
 
             first_run = False
@@ -336,7 +333,7 @@ class SquishyJKMeans(object):
 
     def fit(self, X):
         X, self.weights = X
-        self.distance_matrix = weighted_jaccard_distance_matrix(X, self.weights)
+        self.distance_matrix = weighted_jaccard_distance_matrix(X, self.weights, n_jobs=self.n_jobs)
         for _ in xrange(self.n_attempts):
             assignments = self.fit_once(X)
             if self.assignments is None:
