@@ -10,7 +10,7 @@ if __name__ == '__main__':
     numerals = mnist.target
     slc = FullSLCluster(k=5,
                 model_type='random_forest',
-                kmeans_type='squishy'
+                kmeans_type='squishy',
                 n_forests=192,
                 n_trees=2,
                 n_features_to_predict=0.4,
