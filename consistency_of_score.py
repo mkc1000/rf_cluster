@@ -12,13 +12,14 @@ SLC_PARAMS = {
         'n_forests' : [150,200],
         'max_depth' : [3,5],
         'weight_extent' : [1,1.5,2],
+        'kmeans_type' : ['squishy']
     }
 
 def test_params(param_dict, data):
     random.seed(datetime.now())
     np.random.seed(random.randint(0,100000))
     print "starting to test ", param_dict
-    slc1 = FullSLCluster(**param_dict, kmeans_type='squishy')
+    slc1 = FullSLCluster(**param_dict)
     wcv1 = WCVScore(slc1)
     wcv_score1, _ = wcv1.score(data)
     slc2 = FullSLCluster(**param_dict)
