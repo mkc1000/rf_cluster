@@ -111,16 +111,15 @@ class SLCluster(object):
         decision_paths = Parallel(n_jobs=self.n_jobs)(delayed(get_predictions)(self,X,i,features_to_predict) for i, features_to_predict in enumerate(self.features_indices))
         print decision_paths
         self.decsion_paths = np.hstack(decision_paths)
+        print self.decision_paths
 
         if self.outputting_weights:
             self.weights = Parallel(n_jobs=self.n_jobs)(delayed(get_weight)(self,X,features_to_predict) for features_to_predict in self.features_indices)
-
-        if not self.outputting_weights:
-            return self.decision_paths
-        else:
             self.weights = np.array(self.weights)
             self.weights = self.weights/np.sum(self.weights)
             return self.decision_paths, self.weights
+        else:
+            return self.decision_paths
 
     def fit_transform(self, X_init, _=None):
         self.fit(X_init)

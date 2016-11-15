@@ -10,7 +10,7 @@ if __name__ == '__main__':
     numerals = mnist.target
     slc = FullSLCluster(k=10,
                 model_type='gradient_boosting',
-                n_forests=150,
+                n_forests=64,
                 n_trees=2,
                 n_features_to_predict=0.5,
                 max_depth=2, #should be 2 for boosting
