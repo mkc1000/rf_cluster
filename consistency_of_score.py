@@ -22,19 +22,12 @@ def test_params(param_dict, data):
     slc1 = FullSLCluster(**param_dict)
     wcv1 = WCVScore(slc1)
     wcv_score1, _ = wcv1.score(data)
-    slc2 = FullSLCluster(**param_dict)
-    wcv2 = WCVScore(slc2)
-    try:
-        wcv_score2, _ = wcv2.score(data),
-    except:
-        print param_dict
-        print wcv2.wcvs
-        return wcv_score1, 0
     print "done testing ", param_dict
-    return wcv_score1, wcv_score2
-
+    return wcv_score1
 
 if __name__ == '__main__':
     params_list = grid_search(SLC_PARAMS)
     data = load_diabetes().data
     output = Parallel(n_jobs=-1)(delayed(test_params)(param_dict, data) for param_dict in params_list)
+    params_list2 = grid_search(SLC_PARAMS)
+    output2 = Parallel(n_jobs=-1)(delayed(test_params)(param_dict, data) for param_dict in params_list2)
