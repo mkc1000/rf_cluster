@@ -8,11 +8,12 @@ if __name__ == '__main__':
         mnist = pickle.load(f)
     X = mnist.data
     numerals = mnist.target
-    slc = FullSLCluster(k=10,
+    slc = FullSLCluster(k=5,
                 model_type='random_forest',
+                kmeans_type='squishy',
                 n_forests=192,
-                n_trees=2,
-                n_features_to_predict=0.4,
+                n_trees=1,
+                n_features_to_predict=0.5,
                 max_depth=5, #should be 2 for boosting
                 learning_rate=0.6,
                 using_weights=True,
@@ -20,6 +21,6 @@ if __name__ == '__main__':
                 max_iter=60,
                 n_attempts=10,
                 weight_adjustment=0,
-                eig_extent=1,
+                eig_extent=0,
                 n_jobs=-1)
     assignments = slc.fit_predict(X)
