@@ -47,19 +47,20 @@ class SLCluster(object):
         for i in xrange(self.n_forests):
             features_to_predict = np.random.choice(np.arange(X.shape[1]),(n_output,),replace=False)
             self.features_indices.append(features_to_predict)
-            y_temp = X[:, features_to_predict]
-            if self.model_type == 'gradient_boosting':
-                y_temp = np.apply_along_axis(np.mean,1,y_temp)
-            X_temp = np.delete(X, features_to_predict, axis=1)
-            self.slms[i].fit(X_temp, y_temp)
+            
+            # y_temp = X[:, features_to_predict]
+            # if self.model_type == 'gradient_boosting':
+            #     y_temp = np.apply_along_axis(np.mean,1,y_temp)
+            # X_temp = np.delete(X, features_to_predict, axis=1)
+            # self.slms[i].fit(X_temp, y_temp)
 
-        # ##################
-        # def fit_sl_model(slcluster, X, i, features_to_predict):
-        #     y_temp = X[:, features_to_predict]
-        #     X_temp = np.delete(X, features_to_predict, axis=1)
-        #     slcluster.slms[i].fit(X_temp, y_temp)
-        # Parallel(n_jobs=self.n_jobs)(delayed(fit_sl_model)(self, X, i, features_to_predict) for i, features_to_predict in enumerate(self.features_indices))
-        # ##################
+        ##################
+        def fit_sl_model(slcluster, X, i, features_to_predict):
+            y_temp = X[:, features_to_predict]
+            X_temp = np.delete(X, features_to_predict, axis=1)
+            slcluster.slms[i].fit(X_temp, y_temp)
+        Parallel(n_jobs=self.n_jobs)(delayed(fit_sl_model)(self, X, i, features_to_predict) for i, features_to_predict in enumerate(self.features_indices))
+        ##################
 
     def transform(self, X_init):
         self.decision_paths = None
@@ -69,43 +70,43 @@ class SLCluster(object):
         X_ss = self.ss1.transform(X_init)
         X = self.pca.transform(X_ss)
 
-        for i, features_to_predict in enumerate(self.features_indices):
+        # for i, features_to_predict in enumerate(self.features_indices):
+        #     y_temp = X[:, features_to_predict]
+        #     X_temp = np.delete(X, features_to_predict, axis=1)
+        #     predictions = self.slms[i].predict(X_temp)
+        #     if self.outputting_weights:
+        #         y_temp_var = np.sum(np.apply_along_axis(np.var, 0, y_temp))
+        #         weight = (1/y_temp_var)**self.weight_extent
+        #         self.weights.append(weight)
+        #     if len(predictions.shape) > 1:
+        #         predictions = np.sum(predictions, 1).reshape(-1,1)
+        #     else:
+        #         predictions = predictions.reshape(-1,1)
+        #     if self.decision_paths is None:
+        #         self.decision_paths = predictions
+        #     else:
+        #         self.decision_paths = np.hstack((self.decision_paths, predictions))
+
+        ##################
+        def get_predictions(slcluster, X, i, features_to_predict):
             y_temp = X[:, features_to_predict]
             X_temp = np.delete(X, features_to_predict, axis=1)
-            predictions = self.slms[i].predict(X_temp)
-            if self.outputting_weights:
-                y_temp_var = np.sum(np.apply_along_axis(np.var, 0, y_temp))
-                weight = (1/y_temp_var)**self.weight_extent
-                self.weights.append(weight)
+            predictions = slcluster.slms[i].predict(X_temp)
             if len(predictions.shape) > 1:
                 predictions = np.sum(predictions, 1).reshape(-1,1)
             else:
                 predictions = predictions.reshape(-1,1)
-            if self.decision_paths is None:
-                self.decision_paths = predictions
-            else:
-                self.decision_paths = np.hstack((self.decision_paths, predictions))
+            return predictions
+        self.decsion_paths = np.hstack(Parallel(n_jobs=self.n_jobs)(delayed(get_predictions)(self,X,i,features_to_predict) for i, features_to_predict in enumerate(self.features_indices)))
 
-#         ##################
-#         def get_predictions(slcluster, X, i, features_to_predict):
-#             y_temp = X[:, features_to_predict]
-#             X_temp = np.delete(X, features_to_predict, axis=1)
-#             predictions = slcluster.slms[i].predict(X_temp)
-#             if len(predictions.shape) > 1:
-#                 predictions = np.sum(predictions, 1).reshape(-1,1)
-#             else:
-#                 predictions = predictions.reshape(-1,1)
-#             return predictions
-#         self.decsion_paths = np.hstack(Parallel(n_jobs=self.n_jobs)(delayed(get_predictions)(self,X,i,features_to_predict) for i, features_to_predict in enumerate(self.features_indices)))
-#
-#         if self.outputting_weights:
-#             def get_weight(slcluster, X, features_to_predict):
-#                 y_temp = X[:, features_to_predict]
-#                 y_temp_var = np.sum(np.apply_along_axis(np.var, 0, y_temp))
-#                 weight = (1/y_temp_var)**slcluster.weight_extent
-#                 return weight
-#             self.weights = Parallel(n_jobs=self.n_jobs)(delayed(get_weight)(self,X,features_to_predict) for features_to_predict in self.features_indices)
-#         ##################
+        if self.outputting_weights:
+            def get_weight(slcluster, X, features_to_predict):
+                y_temp = X[:, features_to_predict]
+                y_temp_var = np.sum(np.apply_along_axis(np.var, 0, y_temp))
+                weight = (1/y_temp_var)**slcluster.weight_extent
+                return weight
+            self.weights = Parallel(n_jobs=self.n_jobs)(delayed(get_weight)(self,X,features_to_predict) for features_to_predict in self.features_indices)
+        ##################
 
         if not self.outputting_weights:
             return self.decision_paths
@@ -119,17 +120,17 @@ class SLCluster(object):
         return self.transform(X_init)
 
 
-# """
-# Further thoughts for what to do with data_t (output of SLCluster.fit_transform)
-# For each feature, consider how well the jaccard distances among all the points made from all the other features align with the jaccard distances made from just that feature (0's and 1's)
-# For any two points, consider the features they share. If only those features existed, then for each of the two points, do other nearby points move closer or farther? If they move closer, the distance could be decreased (there could be another matrix that gets added on top of the distance matrix as a correction)
-#
-# After an iteration of k-means, certain features, if weighted more heavily, would render points within clusters closer together. Weights on features could be adjusted iteratively, leading to new distance matrix every time. (EDIT: Done that)
-# Alternatively, every point could have its own weighting of the various features, and to get the distance between two points, their weights would have to be averaged or something. In that case, for each cluster separately, different features might, if more heavily weighted, reduce within-cluster distance. Another option for how to deal with every point having its own set of weights over features: get the euclidean distances of points' weight vectors.
-# A third option: each cluster could have its own weights on the importance of different features. When a new centroid point is chosen, new feature priorities are chosen as well, and points are assigned according to which cluster, along with that cluster's priorities, it is the best match for. (This basically allows clusters to flatten and stretch along certain axes in this space)
-#
-# If all the rest of this fails, just this part could be useful in itself. This is basically an ensemble strategy for clustering.
-# """
+"""
+Further thoughts for what to do with data_t (output of SLCluster.fit_transform)
+For each feature, consider how well the jaccard distances among all the points made from all the other features align with the jaccard distances made from just that feature (0's and 1's)
+For any two points, consider the features they share. If only those features existed, then for each of the two points, do other nearby points move closer or farther? If they move closer, the distance could be decreased (there could be another matrix that gets added on top of the distance matrix as a correction)
+
+After an iteration of k-means, certain features, if weighted more heavily, would render points within clusters closer together. Weights on features could be adjusted iteratively, leading to new distance matrix every time. (EDIT: Done that)
+Alternatively, every point could have its own weighting of the various features, and to get the distance between two points, their weights would have to be averaged or something. In that case, for each cluster separately, different features might, if more heavily weighted, reduce within-cluster distance. Another option for how to deal with every point having its own set of weights over features: get the euclidean distances of points' weight vectors.
+A third option: each cluster could have its own weights on the importance of different features. When a new centroid point is chosen, new feature priorities are chosen as well, and points are assigned according to which cluster, along with that cluster's priorities, it is the best match for. (This basically allows clusters to flatten and stretch along certain axes in this space)
+
+If all the rest of this fails, just this part could be useful in itself. This is basically an ensemble strategy for clustering.
+"""
 
 """
 In picking a new centroid for jkmeans, it could be the point that minimizes sum(f(distance_to_other_points)) as opposed to sum(distance_to_other_points). Like, I don't know, f(x) = -log(1-x). Or f(x) = sqrt(x), x**(1/3), etc.

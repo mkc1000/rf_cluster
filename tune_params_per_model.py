@@ -44,3 +44,9 @@ if __name__ == '__main__':
         pickle.dump(outputs, f)
     with open('big_tune_params.pkl','w') as f:
         pickle.dump(params_list,f)
+    initial_variances = [[np.sum(np.apply_along_axis(np.var,0,data[:,row[2]])) for row in output] for data,output in zip(datasets,outputs)]
+    variance_fractions = [[row[1]/var for row, var in zip(output,initial_variance)] for output, initial_variance in zip(outputs,initial_variances)]
+    wcvs = [[row[0] for row in output] for output in outputs]
+    final_outputs = wcvs, variance_fractions
+    with open('big_tune_params.pkl','w') as f:
+        pickle.dump(final_outputs, f)
