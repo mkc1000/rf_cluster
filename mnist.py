@@ -8,8 +8,9 @@ if __name__ == '__main__':
         mnist = pickle.load(f)
     X = mnist.data
     numerals = mnist.target
-    slc = FullSLCluster(k=10,
+    slc = FullSLCluster(k=5,
                 model_type='random_forest',
+                kmeans_type='squishy'
                 n_forests=192,
                 n_trees=2,
                 n_features_to_predict=0.4,
