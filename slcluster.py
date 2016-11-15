@@ -262,3 +262,79 @@ class JKMeans(object):
     def fit_predict(self, X, _=None):
         self.fit(X)
         return self.assignments
+
+class SquishyJKMeans(object):
+    def __init__(self, k, max_iter=100, n_attempts=10, accepting_weights=True, weight_adjustment=0):
+        self.k = k
+        self.n_attempts = n_attempts
+        if max_iter is None:
+            self.max_iter = -1
+        else:
+            self.max_iter = max_iter
+        self.distance_matrix = None
+        self.to_centroid_distances = None
+        self.assignments = None
+        self.assignment_score = None
+
+    def fit_once(self, X):
+        assignments = np.random.randint(0,self.k,size=X.shape[0])
+        old_assignments = np.zeros(assignments.shape)
+        it = 0
+        while (old_assignments != assignments).any() and it != self.max_iter:
+            it += 1
+            old_assignments = assignments
+
+            self.to_centroid_distances = []
+            centroids = []
+            first_run = True
+            for cluster in xrange(self.k):
+                mask = assignments == cluster
+                if np.sum(mask) == 0:
+                    continue
+                weights = np.apply_along_axis(lambda col: mutual_info_score(mask, col), 0, X)
+                distance_matrix = weighted_jaccard_distance_matrix(X, weights)
+                if first_run:
+                    distance_matrix = self.distance_matrix
+                within_cluster_distance_matrix = (distance_matrix[mask]).T
+                most_central_point = np.argmin(np.sum(within_cluster_distance_matrix,1))
+                centroids.append(most_central_point)
+                self.to_centroid_distances.append(distance_matrix[:,most_central_point].reshape(-1,1))
+
+            to_centroid_distance_matrix = np.hstack(self.to_centroid_distances)
+            assignments = np.apply_along_axis(np.argmin, 1, to_centroid_distance_matrix)
+
+            first_run = False
+        return assignments
+
+    def score(self, assignments):
+        centroids = []
+        for cluster in xrange(self.k):
+            mask = assignments == cluster
+            if np.sum(mask) == 0:
+                continue
+            within_cluster_distance_matrix = (self.distance_matrix[mask]).T
+            most_central_point = np.argmin(np.sum(within_cluster_distance_matrix,1))
+            centroids.append(most_central_point)
+        to_centroid_distance_matrix = (self.distance_matrix[centroids]).T
+        scores = np.apply_along_axis(np.min, 1, to_centroid_distance_matrix)
+        score = np.sum(scores)
+        return score
+
+    def fit(self, X):
+        X, self.weights = X
+        self.distance_matrix = weighted_jaccard_distance_matrix(X, self.weights)
+        for _ in xrange(self.n_attempts):
+            assignments = self.fit_once(X)
+            if self.assignments is None:
+                self.assignments = assignments
+                self.assignment_score = self.score(self.assignments)
+            else:
+                score = self.score(assignments)
+                if score < self.assignment_score:
+                    self.assignment_score = score
+                    self.assignments = assignments
+        return self
+
+    def fit_predict(self, X, _=None):
+        self.fit(X)
+        return self.assignments
