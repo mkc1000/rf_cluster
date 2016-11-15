@@ -24,9 +24,7 @@ def get_predictions(slcluster, X, i, features_to_predict):
     X_temp = np.delete(X, features_to_predict, axis=1)
     predictions = slcluster.slms[i].predict(X_temp)
     if len(predictions.shape) > 1:
-        predictions = np.sum(predictions, 1) #.reshape(-1,1)
-    # else:
-    #     predictions = predictions.reshape(-1,1)
+        predictions = np.sum(predictions, 1)
     return predictions
 
 def get_weight(slcluster, X, features_to_predict):
@@ -109,10 +107,7 @@ class SLCluster(object):
         #     else:
         #         self.decision_paths = np.hstack((self.decision_paths, predictions))
         decision_paths = Parallel(n_jobs=self.n_jobs)(delayed(get_predictions)(self,X,i,features_to_predict) for i, features_to_predict in enumerate(self.features_indices))
-        print decision_paths
-        # self.decsion_paths = np.hstack(decision_paths)
         self.decision_paths = (np.array(decision_paths)).T
-        print self.decision_paths
 
         if self.outputting_weights:
             self.weights = Parallel(n_jobs=self.n_jobs)(delayed(get_weight)(self,X,features_to_predict) for features_to_predict in self.features_indices)
