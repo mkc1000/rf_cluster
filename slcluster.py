@@ -82,17 +82,7 @@ class SLCluster(object):
             # X_temp = np.delete(X, features_to_predict, axis=1)
             # self.slms[i].fit(X_temp, y_temp)
 
-        ##################
-        # def fit_sl_model(slcluster, X, i, features_to_predict):
-        #     print "starting to fit model"
-        #     y_temp = X[:, features_to_predict]
-        #     if self.model_type == 'gradient_boosting':
-        #         y_temp = np.apply_along_axis(np.mean,1,y_temp)
-        #     X_temp = np.delete(X, features_to_predict, axis=1)
-        #     slcluster.slms[i].fit(X_temp, y_temp)
-        #     print "done fitting model"
         self.slms = Parallel(n_jobs=self.n_jobs)(delayed(fit_sl_model)(self, X, i, features_to_predict) for i, features_to_predict in enumerate(self.features_indices))
-        ##################
 
     def transform(self, X_init):
         self.decision_paths = None
@@ -118,29 +108,12 @@ class SLCluster(object):
         #         self.decision_paths = predictions
         #     else:
         #         self.decision_paths = np.hstack((self.decision_paths, predictions))
-
-        ##################
-        # def get_predictions(slcluster, X, i, features_to_predict):
-        #     print "starting to transform data"
-        #     y_temp = X[:, features_to_predict]
-        #     X_temp = np.delete(X, features_to_predict, axis=1)
-        #     predictions = slcluster.slms[i].predict(X_temp)
-        #     if len(predictions.shape) > 1:
-        #         predictions = np.sum(predictions, 1).reshape(-1,1)
-        #     else:
-        #         predictions = predictions.reshape(-1,1)
-        #     return predictions
-        self.decsion_paths = np.hstack(Parallel(n_jobs=self.n_jobs)(delayed(get_predictions)(self,X,i,features_to_predict) for i, features_to_predict in enumerate(self.features_indices)))
+        decision_paths = Parallel(n_jobs=self.n_jobs)(delayed(get_predictions)(self,X,i,features_to_predict) for i, features_to_predict in enumerate(self.features_indices))
+        print decision_paths
+        self.decsion_paths = np.hstack(decision_paths)
 
         if self.outputting_weights:
-            # def get_weight(slcluster, X, features_to_predict):
-            #     y_temp = X[:, features_to_predict]
-            #     y_temp_var = np.sum(np.apply_along_axis(np.var, 0, y_temp))
-            #     weight = (1/y_temp_var)**slcluster.weight_extent
-            #     print "done transforming data"
-            #     return weight
             self.weights = Parallel(n_jobs=self.n_jobs)(delayed(get_weight)(self,X,features_to_predict) for features_to_predict in self.features_indices)
-        ##################
 
         if not self.outputting_weights:
             return self.decision_paths
