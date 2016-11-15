@@ -171,8 +171,10 @@ class EigenvectorWeighting(object):
 def jaccard(x,y):
     return np.mean(x!=y)
 
-def weighted_jaccard(x,y,w):
+def weighted_jaccard(x,y,w=None):
     """w is list of weights, same length as x and y summing to 1"""
+    if w is None:
+        return jaccard(x,y)
     return (x!=y).dot(w)
 
 def jaccard_distance_matrix(X, n_jobs=1):
@@ -180,13 +182,18 @@ def jaccard_distance_matrix(X, n_jobs=1):
     X_int = vint(X*100)
     return pairwise_distances(X_int, metric=jaccard, n_jobs=n_jobs)
 
+# class wjacacrd(object):
+#     "Necessary for parallelizing. Can't pickle a lambda function."
+#     def __init__(self,w):
+#         self.w = w
+#     def wjaccard(x,y)
+
 def weighted_jaccard_distance_matrix(X, w, n_jobs=1):
     """w has length X.shape[1]"""
     vint = np.vectorize(int)
     X_int = vint(X*100)
-    wjaccard = lambda x,y: weighted_jaccard(x,y,w)
     print "starting to make distance matrix"
-    distance_matrix = pairwise_distances(X_int, metric=wjaccard,n_jobs=n_jobs)
+    distance_matrix = pairwise_distances(X_int, w=w, metric=weighted_jaccard,n_jobs=n_jobs)
     print "done making distance matrix"
     return distance_matrix
 
