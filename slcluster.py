@@ -47,7 +47,7 @@ class SLCluster(object):
         for i in xrange(self.n_forests):
             features_to_predict = np.random.choice(np.arange(X.shape[1]),(n_output,),replace=False)
             self.features_indices.append(features_to_predict)
-            
+
             # y_temp = X[:, features_to_predict]
             # if self.model_type == 'gradient_boosting':
             #     y_temp = np.apply_along_axis(np.mean,1,y_temp)
@@ -56,9 +56,11 @@ class SLCluster(object):
 
         ##################
         def fit_sl_model(slcluster, X, i, features_to_predict):
+            print "starting to fit model"
             y_temp = X[:, features_to_predict]
             X_temp = np.delete(X, features_to_predict, axis=1)
             slcluster.slms[i].fit(X_temp, y_temp)
+            print "done fitting model"
         Parallel(n_jobs=self.n_jobs)(delayed(fit_sl_model)(self, X, i, features_to_predict) for i, features_to_predict in enumerate(self.features_indices))
         ##################
 
@@ -89,6 +91,7 @@ class SLCluster(object):
 
         ##################
         def get_predictions(slcluster, X, i, features_to_predict):
+            print "starting to transform data"
             y_temp = X[:, features_to_predict]
             X_temp = np.delete(X, features_to_predict, axis=1)
             predictions = slcluster.slms[i].predict(X_temp)
@@ -104,6 +107,7 @@ class SLCluster(object):
                 y_temp = X[:, features_to_predict]
                 y_temp_var = np.sum(np.apply_along_axis(np.var, 0, y_temp))
                 weight = (1/y_temp_var)**slcluster.weight_extent
+                print "done transforming data"
                 return weight
             self.weights = Parallel(n_jobs=self.n_jobs)(delayed(get_weight)(self,X,features_to_predict) for features_to_predict in self.features_indices)
         ##################
