@@ -14,8 +14,9 @@ def fit_sl_model(slcluster, X, i, features_to_predict):
     if slcluster.model_type == 'gradient_boosting':
         y_temp = np.apply_along_axis(np.mean,1,y_temp)
     X_temp = np.delete(X, features_to_predict, axis=1)
-    slcluster.slms[i].fit(X_temp, y_temp)
+    slm_fit = slcluster.slms[i].fit(X_temp, y_temp)
     print "done fitting model"
+    return slm_fit
 
 def get_predictions(slcluster, X, i, features_to_predict):
     print "starting to transform data"
@@ -90,7 +91,7 @@ class SLCluster(object):
         #     X_temp = np.delete(X, features_to_predict, axis=1)
         #     slcluster.slms[i].fit(X_temp, y_temp)
         #     print "done fitting model"
-        Parallel(n_jobs=self.n_jobs)(delayed(fit_sl_model)(self, X, i, features_to_predict) for i, features_to_predict in enumerate(self.features_indices))
+        self.slms = Parallel(n_jobs=self.n_jobs)(delayed(fit_sl_model)(self, X, i, features_to_predict) for i, features_to_predict in enumerate(self.features_indices))
         ##################
 
     def transform(self, X_init):
