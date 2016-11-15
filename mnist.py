@@ -18,5 +18,6 @@ if __name__ == '__main__':
                 max_iter=60,
                 n_attempts=10,
                 weight_adjustment=0,
-                eig_extent=5)
+                eig_extent=5,
+                n_jobs=-1)
     assignments = slc.fit_predict(X)

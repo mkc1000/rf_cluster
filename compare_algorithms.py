@@ -23,7 +23,8 @@ class FullSLCluster(Pipeline):
                 max_iter=60,
                 n_attempts=10,
                 weight_adjustment=0,
-                eig_extent=0):
+                eig_extent=0,
+                n_jobs=1):
         slc = SLCluster(n_forests,
                         model_type=model_type,
                         n_trees=n_trees,
@@ -31,7 +32,8 @@ class FullSLCluster(Pipeline):
                         max_depth=max_depth,
                         outputting_weights=using_weights,
                         weight_extent=weight_extent,
-                        learning_rate=learning_rate)
+                        learning_rate=learning_rate,
+                        n_jobs=n_jobs)
         ew = EigenvectorWeighting(extent=eig_extent)
         jk = JKMeans(k,
                         max_iter=max_iter,
