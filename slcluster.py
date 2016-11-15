@@ -9,17 +9,14 @@ from numpy.linalg import matrix_power
 from joblib import Parallel, delayed
 
 def fit_sl_model(slcluster, X, i, features_to_predict):
-    print "starting to fit model"
     y_temp = X[:, features_to_predict]
     if slcluster.model_type == 'gradient_boosting':
         y_temp = np.apply_along_axis(np.mean,1,y_temp)
     X_temp = np.delete(X, features_to_predict, axis=1)
     slm_fit = slcluster.slms[i].fit(X_temp, y_temp)
-    print "done fitting model"
     return slm_fit
 
 def get_predictions(slcluster, X, i, features_to_predict):
-    print "starting to transform data"
     y_temp = X[:, features_to_predict]
     X_temp = np.delete(X, features_to_predict, axis=1)
     predictions = slcluster.slms[i].predict(X_temp)
@@ -31,7 +28,6 @@ def get_weight(slcluster, X, features_to_predict):
     y_temp = X[:, features_to_predict]
     y_temp_var = np.sum(np.apply_along_axis(np.var, 0, y_temp))
     weight = (1/y_temp_var)**slcluster.weight_extent
-    print "done transforming data"
     return weight
 
 class SLCluster(object):
