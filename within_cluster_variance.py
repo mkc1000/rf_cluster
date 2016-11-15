@@ -23,9 +23,9 @@ def score_once(wcv, data, i):
     predictions = wcv.model.fit_predict(X)
     n_clusters = len(np.unique(predictions))
     within_cluster_variance = mean_cluster_variances(predictions, y)
-    print "WCV :::::::::::::", within_cluster_variance ":::::::::::"
+    print "WCV :::::::::::::", within_cluster_variance, ":::::::::::"
     total_variance = np.var(y)
-    print "TotalVariance :::::::", total_variance ":::::::::::"
+    print "TotalVariance :::::::", total_variance, ":::::::::::"
     scaled_within_cluster_variance = within_cluster_variance / total_variance
     return scaled_within_cluster_variance, n_clusters
 
