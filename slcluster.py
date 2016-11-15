@@ -11,6 +11,8 @@ from joblib import Parallel, delayed
 def fit_sl_model(slcluster, X, i, features_to_predict):
     print "starting to fit model"
     y_temp = X[:, features_to_predict]
+    if slcluster.model_type == 'gradient_boosting':
+        y_temp = np.apply_along_axis(np.mean,1,y_temp)
     X_temp = np.delete(X, features_to_predict, axis=1)
     slcluster.slms[i].fit(X_temp, y_temp)
     print "done fitting model"
@@ -83,6 +85,8 @@ class SLCluster(object):
         # def fit_sl_model(slcluster, X, i, features_to_predict):
         #     print "starting to fit model"
         #     y_temp = X[:, features_to_predict]
+        #     if self.model_type == 'gradient_boosting':
+        #         y_temp = np.apply_along_axis(np.mean,1,y_temp)
         #     X_temp = np.delete(X, features_to_predict, axis=1)
         #     slcluster.slms[i].fit(X_temp, y_temp)
         #     print "done fitting model"
