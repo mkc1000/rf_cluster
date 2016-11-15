@@ -21,7 +21,7 @@ def score_once(wcv, data, i):
     y = data[:,i]
     X = np.delete(data, i, axis=1)
     predictions = wcv.model.fit_predict(X)
-    n_clusters = len(np.unique(predictions)))
+    n_clusters = len(np.unique(predictions))
     within_cluster_variance = mean_cluster_variances(predictions, y)
     total_variance = np.var(y)
     scaled_within_cluster_variance = within_cluster_variance / total_variance
