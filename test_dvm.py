@@ -2,6 +2,7 @@ from within_cluster_variance import DevariancedModel
 from compare_algorithms import FullSLCluster
 from sklearn.datasets import load_boston
 import cPickle as pickle
+import numpy as np
 
 if __name__ == '__main__':
     slc_wcvs = []
