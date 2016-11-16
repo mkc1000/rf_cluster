@@ -30,17 +30,21 @@ def score_once(wcv, data, i):
     return scaled_within_cluster_variance, n_clusters
 
 class WCVScore(object):
-    def __init__(self, model, sample=False, n_jobs=1):
+    def __init__(self, model, max_iter=10, n_jobs=1):
         self.model = model
         self.wcvs = []
         self.n_clusters = []
         self.sample = sample
         self.n_jobs=n_jobs
+        self.max_iter = max_iter
 
     def score(self, data):
         self.wcvs = []
         n_features = data.shape[1]
-        output = Parallel(n_jobs=self.n_jobs)(delayed(score_once)(self, data, i) for i in xrange(n_features))
+        features = np.arange(n_features)
+        if n_features > self.max_iter:
+            features = np.random.choice(features,size=self.max_iter,replace=False)
+        output = Parallel(n_jobs=self.n_jobs)(delayed(score_once)(self, data, i) for i in features)
         output = np.array(output)
         self.wcvs = output[:,0]
         self.n_clusters = output[:,1]
@@ -98,6 +102,7 @@ class DevariancedModel(object):
         return wcv, all_predictions
 
     def fit(self,data):
+        print 'starting to fit dvm'
         wcvs = []
         all_all_predictions = []
         for _ in xrange(self.n_attempts):
@@ -109,7 +114,11 @@ class DevariancedModel(object):
         mutual_info_distance_matrix = pairwise_distances(all_predictions.T, metric=mutual_info_score)
         best_prediction = all_predictions[:,np.argmax(np.sum(mutual_info_distance_matrix,0))]
         self.prediction = best_prediction
+        print 'done fitting dvm'
         return self
+
+    def predict(self,data):
+        return self.prediction
 
     def fit_predict(self,data):
         self.fit(data)

@@ -17,8 +17,8 @@ For each other combo of assignmnets in partition 1 vs. partition 2:
         try assigning that combo to that cluster
 maximize mutual information from new assignments to old ones.
 
-
 """
+
 
 
 
