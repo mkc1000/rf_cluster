@@ -76,10 +76,10 @@ MODEL_PARAMS = {
         'parameters' : {
             'k' : [3,5,7],
             'n_forests' : [150],
-            'n_trees' : [2],
+            'n_trees' : [1],
             'n_features_to_predict' : [0.5],
             'max_depth' : [4,5,6],
-            'weight_extent' : [1],
+            'weight_extent' : [1,2],
             'n_jobs' : [-1]
         }
     }
@@ -90,6 +90,6 @@ if __name__ == '__main__':
     ss = StandardScaler()
     data_ss = ss.fit_transform(data)
     models = parameterized_models()
-    output = Parallel(n_jobs=1)(delayed(score_model)(model_name, model, data_ss) for model_name, model in models)
+    output = Parallel(n_jobs=-1)(delayed(score_model)(model_name, model, data_ss) for model_name, model in models)
     with open('model_compare_double.pkl','w') as f:
         pickle.dump(output, f)
