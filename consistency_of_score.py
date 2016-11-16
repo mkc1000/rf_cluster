@@ -30,5 +30,6 @@ if __name__ == '__main__':
     params_list = grid_search(SLC_PARAMS)
     data = load_diabetes().data
     output = Parallel(n_jobs=-1)(delayed(test_params)(param_dict, data) for param_dict in params_list)
-    # params_list2 = grid_search(SLC_PARAMS)
-    # output2 = Parallel(n_jobs=-1)(delayed(test_params)(param_dict, data) for param_dict in params_list2)
+    dummy_division = np.array([d['learning_rate'] for d in params_list])
+    output1 = np.array(output)[dummy_division==1]
+    output2 = np.array(output)[dummy_division!=1]
