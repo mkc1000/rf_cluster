@@ -9,10 +9,11 @@ from datetime import datetime
 
 SLC_PARAMS = {
         'k' : [3,5,7],
-        'n_forests' : [150,200],
+        'n_forests' : [600,300],
         'max_depth' : [3,5],
         'weight_extent' : [1,1.5,2],
-        'kmeans_type' : ['squishy']
+        'kmeans_type' : ['squishy'],
+        'learning_rate' : [0,1] #this parameter is not even used
     }
 
 def test_params(param_dict, data):
@@ -29,5 +30,6 @@ if __name__ == '__main__':
     params_list = grid_search(SLC_PARAMS)
     data = load_diabetes().data
     output = Parallel(n_jobs=-1)(delayed(test_params)(param_dict, data) for param_dict in params_list)
-    params_list2 = grid_search(SLC_PARAMS)
-    output2 = Parallel(n_jobs=-1)(delayed(test_params)(param_dict, data) for param_dict in params_list2)
+    dummy_division = np.array([d['learning_rate'] for d in params_list])
+    output1 = np.array(output)[dummy_division==1]
+    output2 = np.array(output)[dummy_division!=1]
