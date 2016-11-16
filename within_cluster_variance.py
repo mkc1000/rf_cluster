@@ -34,7 +34,6 @@ class WCVScore(object):
         self.model = model
         self.wcvs = []
         self.n_clusters = []
-        self.sample = sample
         self.n_jobs=n_jobs
         self.max_iter = max_iter
 
