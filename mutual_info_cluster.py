@@ -1,3 +1,29 @@
+"""
+start with existing partition with maximal mutual information
+from each partition, select point as in centroid step of jkmeans.
+Initialize new partitions, where those points have those assignments, and no other points have assignments.
+For each point:
+    for each partition:
+        suppose the point were added to that partition
+        evaluate the maximal mutual information criterion for the set of points that have an assignment
+    assign the point to the partition that maximizes this criterion
+
+
+Combine just two partitions:
+Find the mapping from cluster in one partition to cluster in the other partition that maximizes number of points with same assigment
+In new cluster assignments, assign those groups to different clusters.
+For each other combo of assignmnets in partition 1 vs. partition 2:
+    for each cluster:
+        try assigning that combo to that cluster
+maximize mutual information from new assignments to old ones.
+
+
+"""
+
+
+
+
+
 """Find clustering with maximal mutual information"""
 
 import numpy as np
