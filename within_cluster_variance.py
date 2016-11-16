@@ -1,5 +1,7 @@
 import numpy as np
 from joblib import Parallel, delayed
+import random
+from datetime import datetime
 
 def mean_cluster_variances(clusters, feature):
     unique_clusters = np.unique(clusters)
@@ -17,32 +19,15 @@ for a given dataset, by withholding a feature one at a time, running the whole m
 and looking at wcv on that feature.
 """
 
-# def score_once(wcv, data, i):
-#     y = data[:,i]
-#     X = np.delete(data, i, axis=1)
-#     predictions = wcv.model.fit_predict(X)
-#     n_clusters = len(np.unique(predictions))
-#     within_cluster_variance = mean_cluster_variances(predictions, y)
-#     total_variance = np.var(y)
-#     scaled_within_cluster_variance = within_cluster_variance / total_variance
-#     return scaled_within_cluster_variance, n_clusters
-#
-# class WCVScore(object):
-#     def __init__(self, model, sample=False, n_jobs=1):
-#         self.model = model
-#         self.wcvs = []
-#         self.n_clusters = []
-#         self.sample = sample
-#         self.n_jobs=n_jobs
-#
-#     def score(self, data):
-#         self.wcvs = []
-#         n_features = data.shape[1]
-#         output = Parallel(n_jobs=self.n_jobs)(delayed(score_once)(self, data, i) for i in xrange(n_features))
-#         output = np.array(output)
-#         self.wcvs = output[:,0]
-#         self.n_clusters = output[:,1]
-#         return np.mean(self.wcvs), np.mean(self.n_clusters)
+def score_once(wcv, data, i):
+    y = data[:,i]
+    X = np.delete(data, i, axis=1)
+    predictions = wcv.model.fit_predict(X)
+    n_clusters = len(np.unique(predictions))
+    within_cluster_variance = mean_cluster_variances(predictions, y)
+    total_variance = np.var(y)
+    scaled_within_cluster_variance = within_cluster_variance / total_variance
+    return scaled_within_cluster_variance, n_clusters
 
 class WCVScore(object):
     def __init__(self, model, sample=False, n_jobs=1):
@@ -50,20 +35,82 @@ class WCVScore(object):
         self.wcvs = []
         self.n_clusters = []
         self.sample = sample
+        self.n_jobs=n_jobs
 
     def score(self, data):
         self.wcvs = []
         n_features = data.shape[1]
-        for i in xrange(n_features):
-            if not self.sample == False:
-                if np.random.random() > self.sample:
-                    continue
+        output = Parallel(n_jobs=self.n_jobs)(delayed(score_once)(self, data, i) for i in xrange(n_features))
+        output = np.array(output)
+        self.wcvs = output[:,0]
+        self.n_clusters = output[:,1]
+        return np.mean(self.wcvs), np.mean(self.n_clusters)
+
+# class WCVScore(object):
+#     def __init__(self, model, sample=False, n_jobs=1):
+#         self.model = model
+#         self.wcvs = []
+#         self.n_clusters = []
+#         self.sample = sample
+#
+#     def score(self, data):
+#         self.wcvs = []
+#         n_features = data.shape[1]
+#         for i in xrange(n_features):
+#             if not self.sample == False:
+#                 if np.random.random() > self.sample:
+#                     continue
+#             y = data[:,i]
+#             X = np.delete(data, i, axis=1)
+#             predictions = self.model.fit_predict(X)
+#             self.n_clusters.append(len(np.unique(predictions)))
+#             within_cluster_variance = mean_cluster_variances(predictions, y)
+#             total_variance = np.var(y)
+#             scaled_within_cluster_variance = within_cluster_variance / total_variance
+#             self.wcvs.append(scaled_within_cluster_variance)
+#         return np.mean(self.wcvs), np.mean(self.n_clusters)
+
+from sklearn.metrics import mutual_info_score
+from sklearn.metrics.pairwise import pairwise_distances
+
+class DevariancedModel(object):
+    def __init__(self,model,n_attempts=4):
+        self.model=model
+        self.n_attempts=n_attempts
+        self.prediction = None
+
+    def fit_once(self, data):
+        random.seed(datetime.now())
+        np.random.seed(random.randint(0,100000))
+        all_predictions = []
+        wcvs = []
+        for i in xrange(data.shape[1]):
             y = data[:,i]
             X = np.delete(data, i, axis=1)
             predictions = self.model.fit_predict(X)
-            self.n_clusters.append(len(np.unique(predictions)))
+            all_predictions.append(predictions)
             within_cluster_variance = mean_cluster_variances(predictions, y)
             total_variance = np.var(y)
             scaled_within_cluster_variance = within_cluster_variance / total_variance
-            self.wcvs.append(scaled_within_cluster_variance)
-        return np.mean(self.wcvs), np.mean(self.n_clusters)
+            wcvs.append(scaled_within_cluster_variance)
+        wcv = np.mean(np.array(wcvs))
+        all_predictions = (np.array(all_predictions)).T
+        return wcv, all_predictions
+
+    def fit(self,data):
+        wcvs = []
+        all_all_predictions = []
+        for _ in xrange(self.n_attempts):
+            wcv, all_predictions = self.fit_once(data)
+            wcvs.append(wcv)
+            all_all_predictions.append(all_predictions)
+        best = np.argmax(np.array(wcvs))
+        all_predictions = all_all_predictions[best]
+        mutual_info_distance_matrix = pairwise_distances(all_predictions.T, metric=mutual_info_score)
+        best_prediction = all_predictions[:,np.argmax(np.sum(mutual_info_distance_matrix,0))]
+        self.prediction = best_prediction
+        return self
+
+    def fit_predict(self,data):
+        self.fit(data)
+        return self.prediction
