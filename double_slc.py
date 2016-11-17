@@ -60,9 +60,9 @@ class DoubleSLCluster(Pipeline):
                             weight_adjustment=weight_adjustment,
                             n_jobs=n_jobs)
         if eig_extent == 0:
-            Pipeline.__init__(self,[('slc1', slc1), ('slc2', slc21), ('jkmeans', jk)])
+            Pipeline.__init__(self,[('slc1', slc1), ('slc2', slc2), ('jkmeans', jk)])
         else:
-            Pipeline.__init__(self,[('slc1', slc1), ('slc2', slc21), ('ew', ew), ('jkmeans', jk)])
+            Pipeline.__init__(self,[('slc1', slc1), ('slc2', slc2), ('ew', ew), ('jkmeans', jk)])
 
 MODEL_PARAMS = {
     'KMeans': {
