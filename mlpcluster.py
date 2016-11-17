@@ -46,7 +46,7 @@ class MLPCluster(object):
             X_temp = np.delete(X, i, axis=1)
             transformed_feature = self.mlps[i].predict(X_temp)
             transformed_features.append(transformed_feature.reshape(-1))
-        transformed_data_pca = (np.array(transformed_data)).T
+        transformed_data_pca = (np.array(transformed_features)).T
         transfored_data_ss = self.pca.inverse_transform(transformed_data_pca)
         if self.standard_scaling:
             transformed_data = self.ss.inverse_transform(transformed_data_ss)
