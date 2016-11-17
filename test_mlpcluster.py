@@ -22,3 +22,6 @@ if __name__ == '__main__':
     pred1 = kmeans.fit_predict(X_transform)
     mutinfo0 = mutual_info_score(pred0,numerals)
     mutinfo1 = mutual_info_score(pred1,numerals)
+    output = pred0, pred1, numerals, mutinfo0, mutinfo1
+    with open('mlp_compare.pkl','w') as f:
+        pickle.dump(output, f)

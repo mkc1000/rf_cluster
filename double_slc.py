@@ -31,7 +31,7 @@ class DoubleSLCluster(Pipeline):
                         n_trees=n_trees,
                         n_features_to_predict=n_features_to_predict,
                         max_depth=max_depth,
-                        outputting_weights=using_weights,
+                        outputting_weights=False,
                         weight_extent=weight_extent,
                         learning_rate=learning_rate,
                         n_jobs=n_jobs)
