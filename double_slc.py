@@ -8,7 +8,7 @@ from joblib import Parallel, delayed
 import itertools
 import cPickle as pickle
 from sklearn.datasets import load_boston, load_diabetes, load_iris, load_breast_cancer, fetch_rcv1
-from compare_algorithms import grid_search, parameterized_models, score_model
+from compare_algorithms import grid_search, score_model
 
 class DoubleSLCluster(Pipeline):
     def __init__(self, k,
@@ -84,6 +84,14 @@ MODEL_PARAMS = {
         }
     }
 }
+
+def parameterized_models():
+    for model_name, d in MODEL_PARAMS.iteritems():
+        Model = d['model']
+        params = d['parameters']
+        for dictionary in grid_search(params):
+            model = Model(**dictionary)
+            yield model_name, model
 
 if __name__ == '__main__':
     data = load_boston().data
