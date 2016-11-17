@@ -2,13 +2,20 @@ import numpy as np
 from sklearn.neural_network import MLPRegressor
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
+from joblib import Parallel, delayed
+
+def fit_mlp(mlp, X, feature):
+    y_temp = X[:,feature]
+    X_temp = np.delete(X, feature, axis=1)
+    return mlp.fit(X_temp,y_temp)
 
 class MLPCluster(object):
-    def __init__(self, hidden_layer_size=5, alpha=0.0001, training_fraction=1, standard_scaling=True):
+    def __init__(self, hidden_layer_size=5, alpha=0.0001, training_fraction=1, standard_scaling=True, n_jobs=-1):
         self.hidden_layer_size = hidden_layer_size
         self.alpha = alpha
         self.training_fraction = training_fraction
         self.standard_scaling=standard_scaling
+        self.n_jobs=n_jobs
         self.mlps = None
         self.pca = PCA()
         self.ss = StandardScaler()
@@ -28,10 +35,11 @@ class MLPCluster(object):
             X_ss = data
         X = self.pca.fit_transform(X_ss)
         self.mlps = [MLPRegressor(hidden_layer_sizes=(self.hidden_layer_size,), activation='logistic', alpha=self.alpha) for _ in xrange(self.n_features)]
-        for i in xrange(self.n_features):
-            y_temp = X[:,i]
-            X_temp = np.delete(X, i, axis=1)
-            self.mlps[i].fit(X_temp,y_temp)
+        # for i in xrange(self.n_features):
+        #     y_temp = X[:,i]
+        #     X_temp = np.delete(X, i, axis=1)
+        #     self.mlps[i].fit(X_temp,y_temp)
+        self.mlps = Parallel(n_jobs=self.n_jobs)(delayed(fit_mlp)(mlp, X, i) for i, mlp in enumerate(self.mlps))
         return self
 
     def transform(self, data):
