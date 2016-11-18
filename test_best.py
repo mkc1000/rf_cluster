@@ -74,10 +74,10 @@ def prepare_tuned_models(select_params_output):
 if __name__ == '__main__':
     models_to_search = grid_search(SLC_PARAMS)
     fit_model_output = Parallel(n_jobs=-1)(delayed(fit_model)(model) for model in models_to_search)
-    with open('big_ole_grid_search_output.pkl','w') as f:
+    with open('big_ole_grid_search_output_no_pca.pkl','w') as f:
         pickle.dump(fit_model_output, f)
     params_per_dataset = select_params_per_dataset_per_k(fit_model_output)
     params_to_retry = prepare_tuned_models(params_per_dataset)
     final_models = Parallel(n_jobs=-1)(delayed(fit_model)(model) for model in params_to_retry)
-    with open('final_models_from_grid_search.pkl','w') as f:
+    with open('final_models_from_grid_search_no_pca.pkl','w') as f:
         pickle.dump(final_models, f)
