@@ -11,6 +11,17 @@ def load_mnist():
     numerals = mnist.target
     return X, numerals
 
+def visualize_mnist_row(row):
+    import matplotlib.pyplot as plt #Sorry about the awkward position for the import; EC2 instances can't import this
+    pixels = np.array(row, dtype='uint8')
+
+    # Reshape the array into 28 x 28 array (2-dimensional array)
+    pixels = pixels.reshape((28, 28))
+
+    # Plot
+    plt.imshow(pixels, cmap='gray')
+    plt.show()
+
 if __name__ == '__main__':
     X, numerals = load_mnist()
     mlpc = MLPCluster(hidden_layer_size=60)
@@ -25,3 +36,5 @@ if __name__ == '__main__':
     output = pred0, pred1, numerals, mutinfo0, mutinfo1
     with open('mlp_compare.pkl','w') as f:
         pickle.dump(output, f)
+    with open('mlp_transform_mnist.pkl', 'w') as f:
+        pickle.dump(X_transform, f)
