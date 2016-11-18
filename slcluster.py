@@ -284,6 +284,7 @@ class SquishyJKMeans(object):
             self.max_iter = -1
         else:
             self.max_iter = max_iter
+        self.accepting_weights = accepting_weights
         self.distance_matrix = None
         self.to_centroid_distances = None
         self.assignments = None
@@ -337,7 +338,10 @@ class SquishyJKMeans(object):
         return score
 
     def fit(self, X):
-        X, self.weights = X
+        if self.accepting_weights:
+            X, self.weights = X
+        else:
+            self.weights = np.ones(X.shape[1])/X.shape[1]
         self.distance_matrix = weighted_jaccard_distance_matrix(X, self.weights, n_jobs=self.n_jobs)
         for _ in xrange(self.n_attempts):
             assignments = self.fit_once(X)
