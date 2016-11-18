@@ -16,12 +16,12 @@ SLC_PARAMS = {
     'model' : [FullSLCluster],
     'dataset' : ['boston','diabetes','iris','breast_cancer'],
     'k' : [2,3,4,5,6,8,10],
-    'kmeans_type' : ['squishy'],
+    'kmeans_type' : ['squishy','normal'],
     'n_forests' : [100],
     'n_trees' : [1],
-    'n_features_to_predict' : [0.5],
-    'max_depth' : [4,5,6],
-    'weight_extent' : [0.5,1,2],
+    'n_features_to_predict' : [0.3,0.5],
+    'max_depth' : [3,5,6],
+    'weight_extent' : [0],
     'n_jobs' : [-1],
 }
 
