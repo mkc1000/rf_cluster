@@ -20,7 +20,7 @@ class FullSLCluster(Pipeline):
                 max_depth=5, #should be 2 for boosting
                 learning_rate=0.6,
                 using_weights=False,
-                using_pca=False
+                using_pca=False,
                 weight_extent=1, # 2 for boosting
                 max_iter=60,
                 n_attempts=10,
