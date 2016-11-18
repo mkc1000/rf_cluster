@@ -60,7 +60,7 @@ class MLPCluster(object):
         #     transformed_features.append(transformed_feature.reshape(-1))
         transformed_features = Parallel(n_jobs=self.n_jobs)(delayed(transform_mlp)(mlp, X, i) for i, mlp in enumerate(self.mlps))
         transformed_data_pca = (np.array(transformed_features)).T
-        transfored_data_ss = self.pca.inverse_transform(transformed_data_pca)
+        transformed_data_ss = self.pca.inverse_transform(transformed_data_pca)
         if self.standard_scaling:
             transformed_data = self.ss.inverse_transform(transformed_data_ss)
         else:
