@@ -31,7 +31,7 @@ def get_weight(slcluster, X, features_to_predict):
     return weight
 
 class SLCluster(object):
-    def __init__(self, n_forests, model_type='random_forest', n_trees=1, n_features_to_predict=0.5, max_depth=5, outputting_weights=True, weight_extent=1, learning_rate=0.9, n_jobs=1):
+    def __init__(self, n_forests, model_type='random_forest', n_trees=1, n_features_to_predict=0.5, max_depth=5, outputting_weights=True, using_pca=True, weight_extent=1, learning_rate=0.9, n_jobs=1):
         self.n_forests = n_forests
         self.n_trees = n_trees
         self.n_features_to_predict = n_features_to_predict
@@ -45,6 +45,9 @@ class SLCluster(object):
             self.slms = [GradientBoostingRegressor(n_estimators=n_trees, learning_rate=learning_rate, max_depth=max_depth) for _ in xrange(n_forests)]
         else:
             raise ValueError("SLCluster.model_type must be 'random_forest' or 'gradient_boosting'.")
+        self.using_pca = using_pca
+        if not self.using_pca and self.outputting_weights:
+            print "Warning: It makes no sense to output weights if you're not using pca."
         self.pca = PCA()
         self.ss1 = StandardScaler()
         self.decision_paths = None
@@ -56,7 +59,10 @@ class SLCluster(object):
         self.features_indices = []
 
         X_ss = self.ss1.fit_transform(X_init)
-        X = self.pca.fit_transform(X_ss)
+        if self.using_pca:
+            X = self.pca.fit_transform(X_ss)
+        else:
+            X = X_ss
         if isinstance(self.n_features_to_predict, float):
             n_output = int(self.n_features_to_predict * X.shape[1])
         elif isinstance(self.n_features_to_predict, int):
@@ -84,7 +90,10 @@ class SLCluster(object):
             self.weights = []
 
         X_ss = self.ss1.transform(X_init)
-        X = self.pca.transform(X_ss)
+        if self.using_pca:
+            X = self.pca.transform(X_ss)
+        else:
+            X = X_ss
 
         # for i, features_to_predict in enumerate(self.features_indices):
         #     y_temp = X[:, features_to_predict]
