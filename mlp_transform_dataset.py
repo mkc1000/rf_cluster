@@ -8,8 +8,7 @@ DATASETS = {
     'boston' : load_boston().data,
     'diabetes' : load_diabetes().data,
     'iris' : load_iris().data,
-    'breast_cancer' : load_breast_cancer().data,
-    'rcv' : fetch_rcv1().data
+    'breast_cancer' : load_breast_cancer().data
 }
 
 if __name__ == '__main__':
