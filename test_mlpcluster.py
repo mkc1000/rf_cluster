@@ -24,7 +24,7 @@ def visualize_mnist_row(row):
 
 if __name__ == '__main__':
     X, numerals = load_mnist()
-    mlpc = MLPCluster(hidden_layer_size=10)
+    mlpc = MLPCluster(hidden_layer_size=5)
     print "starting to transform"
     X_transform = mlpc.fit_transform(X)
     print "done transforming"
@@ -34,7 +34,7 @@ if __name__ == '__main__':
     mutinfo0 = mutual_info_score(pred0,numerals)
     mutinfo1 = mutual_info_score(pred1,numerals)
     output = pred0, pred1, numerals, mutinfo0, mutinfo1
-    with open('mlp_compare_hl10.pkl','w') as f:
+    with open('mlp_compare_hl5.pkl','w') as f:
         pickle.dump(output, f)
     with open('mlp_transform_mnist.pkl', 'w') as f:
         pickle.dump(X_transform, f)
