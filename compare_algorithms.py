@@ -33,7 +33,7 @@ class FullSLCluster(Pipeline):
                         n_features_to_predict=n_features_to_predict,
                         max_depth=max_depth,
                         outputting_weights=using_weights,
-                        using_pca=using_pca
+                        using_pca=using_pca,
                         weight_extent=weight_extent,
                         learning_rate=learning_rate,
                         n_jobs=n_jobs)
