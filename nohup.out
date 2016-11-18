@@ -1,0 +1,288 @@
+/home/ubuntu/rf_cluster/slcluster.py:79: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  self.slms = Parallel(n_jobs=self.n_jobs)(delayed(fit_sl_model)(self, X, i, features_to_predict) for i, features_to_predict in enumerate(self.features_indices))
+/home/ubuntu/rf_cluster/slcluster.py:79: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  self.slms = Parallel(n_jobs=self.n_jobs)(delayed(fit_sl_model)(self, X, i, features_to_predict) for i, features_to_predict in enumerate(self.features_indices))
+/home/ubuntu/rf_cluster/slcluster.py:79: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  self.slms = Parallel(n_jobs=self.n_jobs)(delayed(fit_sl_model)(self, X, i, features_to_predict) for i, features_to_predict in enumerate(self.features_indices))
+/home/ubuntu/rf_cluster/slcluster.py:79: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  self.slms = Parallel(n_jobs=self.n_jobs)(delayed(fit_sl_model)(self, X, i, features_to_predict) for i, features_to_predict in enumerate(self.features_indices))
+/home/ubuntu/rf_cluster/slcluster.py:79: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  self.slms = Parallel(n_jobs=self.n_jobs)(delayed(fit_sl_model)(self, X, i, features_to_predict) for i, features_to_predict in enumerate(self.features_indices))
+/home/ubuntu/rf_cluster/slcluster.py:79: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  self.slms = Parallel(n_jobs=self.n_jobs)(delayed(fit_sl_model)(self, X, i, features_to_predict) for i, features_to_predict in enumerate(self.features_indices))
+/home/ubuntu/rf_cluster/slcluster.py:79: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  self.slms = Parallel(n_jobs=self.n_jobs)(delayed(fit_sl_model)(self, X, i, features_to_predict) for i, features_to_predict in enumerate(self.features_indices))
+/home/ubuntu/rf_cluster/slcluster.py:79: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  self.slms = Parallel(n_jobs=self.n_jobs)(delayed(fit_sl_model)(self, X, i, features_to_predict) for i, features_to_predict in enumerate(self.features_indices))
+/home/ubuntu/rf_cluster/slcluster.py:79: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  self.slms = Parallel(n_jobs=self.n_jobs)(delayed(fit_sl_model)(self, X, i, features_to_predict) for i, features_to_predict in enumerate(self.features_indices))
+/home/ubuntu/rf_cluster/slcluster.py:79: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  self.slms = Parallel(n_jobs=self.n_jobs)(delayed(fit_sl_model)(self, X, i, features_to_predict) for i, features_to_predict in enumerate(self.features_indices))
+/home/ubuntu/rf_cluster/slcluster.py:79: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  self.slms = Parallel(n_jobs=self.n_jobs)(delayed(fit_sl_model)(self, X, i, features_to_predict) for i, features_to_predict in enumerate(self.features_indices))
+/home/ubuntu/rf_cluster/slcluster.py:79: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  self.slms = Parallel(n_jobs=self.n_jobs)(delayed(fit_sl_model)(self, X, i, features_to_predict) for i, features_to_predict in enumerate(self.features_indices))
+/home/ubuntu/rf_cluster/slcluster.py:79: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  self.slms = Parallel(n_jobs=self.n_jobs)(delayed(fit_sl_model)(self, X, i, features_to_predict) for i, features_to_predict in enumerate(self.features_indices))
+/home/ubuntu/rf_cluster/slcluster.py:79: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  self.slms = Parallel(n_jobs=self.n_jobs)(delayed(fit_sl_model)(self, X, i, features_to_predict) for i, features_to_predict in enumerate(self.features_indices))
+/home/ubuntu/rf_cluster/slcluster.py:79: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  self.slms = Parallel(n_jobs=self.n_jobs)(delayed(fit_sl_model)(self, X, i, features_to_predict) for i, features_to_predict in enumerate(self.features_indices))
+/home/ubuntu/rf_cluster/slcluster.py:79: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  self.slms = Parallel(n_jobs=self.n_jobs)(delayed(fit_sl_model)(self, X, i, features_to_predict) for i, features_to_predict in enumerate(self.features_indices))
+/home/ubuntu/rf_cluster/slcluster.py:79: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  self.slms = Parallel(n_jobs=self.n_jobs)(delayed(fit_sl_model)(self, X, i, features_to_predict) for i, features_to_predict in enumerate(self.features_indices))
+/home/ubuntu/rf_cluster/slcluster.py:79: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  self.slms = Parallel(n_jobs=self.n_jobs)(delayed(fit_sl_model)(self, X, i, features_to_predict) for i, features_to_predict in enumerate(self.features_indices))
+/home/ubuntu/rf_cluster/slcluster.py:105: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  decision_paths = Parallel(n_jobs=self.n_jobs)(delayed(get_predictions)(self,X,i,features_to_predict) for i, features_to_predict in enumerate(self.features_indices))
+/home/ubuntu/rf_cluster/slcluster.py:105: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  decision_paths = Parallel(n_jobs=self.n_jobs)(delayed(get_predictions)(self,X,i,features_to_predict) for i, features_to_predict in enumerate(self.features_indices))
+/home/ubuntu/rf_cluster/slcluster.py:105: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  decision_paths = Parallel(n_jobs=self.n_jobs)(delayed(get_predictions)(self,X,i,features_to_predict) for i, features_to_predict in enumerate(self.features_indices))
+/home/ubuntu/rf_cluster/slcluster.py:105: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  decision_paths = Parallel(n_jobs=self.n_jobs)(delayed(get_predictions)(self,X,i,features_to_predict) for i, features_to_predict in enumerate(self.features_indices))
+/home/ubuntu/rf_cluster/slcluster.py:105: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  decision_paths = Parallel(n_jobs=self.n_jobs)(delayed(get_predictions)(self,X,i,features_to_predict) for i, features_to_predict in enumerate(self.features_indices))
+/home/ubuntu/rf_cluster/slcluster.py:105: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  decision_paths = Parallel(n_jobs=self.n_jobs)(delayed(get_predictions)(self,X,i,features_to_predict) for i, features_to_predict in enumerate(self.features_indices))
+/home/ubuntu/rf_cluster/slcluster.py:105: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  decision_paths = Parallel(n_jobs=self.n_jobs)(delayed(get_predictions)(self,X,i,features_to_predict) for i, features_to_predict in enumerate(self.features_indices))
+/home/ubuntu/rf_cluster/slcluster.py:105: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  decision_paths = Parallel(n_jobs=self.n_jobs)(delayed(get_predictions)(self,X,i,features_to_predict) for i, features_to_predict in enumerate(self.features_indices))
+/home/ubuntu/rf_cluster/slcluster.py:105: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  decision_paths = Parallel(n_jobs=self.n_jobs)(delayed(get_predictions)(self,X,i,features_to_predict) for i, features_to_predict in enumerate(self.features_indices))
+/home/ubuntu/rf_cluster/slcluster.py:105: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  decision_paths = Parallel(n_jobs=self.n_jobs)(delayed(get_predictions)(self,X,i,features_to_predict) for i, features_to_predict in enumerate(self.features_indices))
+/home/ubuntu/rf_cluster/slcluster.py:105: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  decision_paths = Parallel(n_jobs=self.n_jobs)(delayed(get_predictions)(self,X,i,features_to_predict) for i, features_to_predict in enumerate(self.features_indices))
+/home/ubuntu/rf_cluster/slcluster.py:105: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  decision_paths = Parallel(n_jobs=self.n_jobs)(delayed(get_predictions)(self,X,i,features_to_predict) for i, features_to_predict in enumerate(self.features_indices))
+/home/ubuntu/rf_cluster/slcluster.py:105: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  decision_paths = Parallel(n_jobs=self.n_jobs)(delayed(get_predictions)(self,X,i,features_to_predict) for i, features_to_predict in enumerate(self.features_indices))
+/home/ubuntu/rf_cluster/slcluster.py:105: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  decision_paths = Parallel(n_jobs=self.n_jobs)(delayed(get_predictions)(self,X,i,features_to_predict) for i, features_to_predict in enumerate(self.features_indices))
+/home/ubuntu/rf_cluster/slcluster.py:105: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  decision_paths = Parallel(n_jobs=self.n_jobs)(delayed(get_predictions)(self,X,i,features_to_predict) for i, features_to_predict in enumerate(self.features_indices))
+/home/ubuntu/rf_cluster/slcluster.py:105: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  decision_paths = Parallel(n_jobs=self.n_jobs)(delayed(get_predictions)(self,X,i,features_to_predict) for i, features_to_predict in enumerate(self.features_indices))
+/home/ubuntu/rf_cluster/slcluster.py:105: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  decision_paths = Parallel(n_jobs=self.n_jobs)(delayed(get_predictions)(self,X,i,features_to_predict) for i, features_to_predict in enumerate(self.features_indices))
+/home/ubuntu/rf_cluster/slcluster.py:105: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  decision_paths = Parallel(n_jobs=self.n_jobs)(delayed(get_predictions)(self,X,i,features_to_predict) for i, features_to_predict in enumerate(self.features_indices))
+/home/ubuntu/rf_cluster/slcluster.py:109: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  self.weights = Parallel(n_jobs=self.n_jobs)(delayed(get_weight)(self,X,features_to_predict) for features_to_predict in self.features_indices)
+/home/ubuntu/rf_cluster/slcluster.py:109: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  self.weights = Parallel(n_jobs=self.n_jobs)(delayed(get_weight)(self,X,features_to_predict) for features_to_predict in self.features_indices)
+/home/ubuntu/rf_cluster/slcluster.py:109: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  self.weights = Parallel(n_jobs=self.n_jobs)(delayed(get_weight)(self,X,features_to_predict) for features_to_predict in self.features_indices)
+/home/ubuntu/rf_cluster/slcluster.py:109: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  self.weights = Parallel(n_jobs=self.n_jobs)(delayed(get_weight)(self,X,features_to_predict) for features_to_predict in self.features_indices)
+/home/ubuntu/anaconda2/lib/python2.7/site-packages/sklearn/metrics/pairwise.py:1060: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  for s in gen_even_slices(Y.shape[0], n_jobs))
+/home/ubuntu/rf_cluster/slcluster.py:109: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  self.weights = Parallel(n_jobs=self.n_jobs)(delayed(get_weight)(self,X,features_to_predict) for features_to_predict in self.features_indices)
+/home/ubuntu/rf_cluster/slcluster.py:109: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  self.weights = Parallel(n_jobs=self.n_jobs)(delayed(get_weight)(self,X,features_to_predict) for features_to_predict in self.features_indices)
+/home/ubuntu/rf_cluster/slcluster.py:109: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  self.weights = Parallel(n_jobs=self.n_jobs)(delayed(get_weight)(self,X,features_to_predict) for features_to_predict in self.features_indices)
+/home/ubuntu/rf_cluster/slcluster.py:109: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  self.weights = Parallel(n_jobs=self.n_jobs)(delayed(get_weight)(self,X,features_to_predict) for features_to_predict in self.features_indices)
+/home/ubuntu/anaconda2/lib/python2.7/site-packages/sklearn/metrics/pairwise.py:1060: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  for s in gen_even_slices(Y.shape[0], n_jobs))
+/home/ubuntu/anaconda2/lib/python2.7/site-packages/sklearn/metrics/pairwise.py:1060: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  for s in gen_even_slices(Y.shape[0], n_jobs))
+/home/ubuntu/rf_cluster/slcluster.py:109: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  self.weights = Parallel(n_jobs=self.n_jobs)(delayed(get_weight)(self,X,features_to_predict) for features_to_predict in self.features_indices)
+/home/ubuntu/anaconda2/lib/python2.7/site-packages/sklearn/metrics/pairwise.py:1060: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  for s in gen_even_slices(Y.shape[0], n_jobs))
+/home/ubuntu/anaconda2/lib/python2.7/site-packages/sklearn/metrics/pairwise.py:1060: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  for s in gen_even_slices(Y.shape[0], n_jobs))
+/home/ubuntu/rf_cluster/slcluster.py:109: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  self.weights = Parallel(n_jobs=self.n_jobs)(delayed(get_weight)(self,X,features_to_predict) for features_to_predict in self.features_indices)
+/home/ubuntu/rf_cluster/slcluster.py:109: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  self.weights = Parallel(n_jobs=self.n_jobs)(delayed(get_weight)(self,X,features_to_predict) for features_to_predict in self.features_indices)
+/home/ubuntu/rf_cluster/slcluster.py:109: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  self.weights = Parallel(n_jobs=self.n_jobs)(delayed(get_weight)(self,X,features_to_predict) for features_to_predict in self.features_indices)
+/home/ubuntu/anaconda2/lib/python2.7/site-packages/sklearn/metrics/pairwise.py:1060: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  for s in gen_even_slices(Y.shape[0], n_jobs))
+/home/ubuntu/anaconda2/lib/python2.7/site-packages/sklearn/metrics/pairwise.py:1060: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  for s in gen_even_slices(Y.shape[0], n_jobs))
+/home/ubuntu/anaconda2/lib/python2.7/site-packages/sklearn/metrics/pairwise.py:1060: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  for s in gen_even_slices(Y.shape[0], n_jobs))
+/home/ubuntu/anaconda2/lib/python2.7/site-packages/sklearn/metrics/pairwise.py:1060: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  for s in gen_even_slices(Y.shape[0], n_jobs))
+/home/ubuntu/anaconda2/lib/python2.7/site-packages/sklearn/metrics/pairwise.py:1060: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  for s in gen_even_slices(Y.shape[0], n_jobs))
+/home/ubuntu/anaconda2/lib/python2.7/site-packages/sklearn/metrics/pairwise.py:1060: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  for s in gen_even_slices(Y.shape[0], n_jobs))
+/home/ubuntu/anaconda2/lib/python2.7/site-packages/sklearn/metrics/pairwise.py:1060: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  for s in gen_even_slices(Y.shape[0], n_jobs))
+/home/ubuntu/rf_cluster/slcluster.py:109: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  self.weights = Parallel(n_jobs=self.n_jobs)(delayed(get_weight)(self,X,features_to_predict) for features_to_predict in self.features_indices)
+/home/ubuntu/rf_cluster/slcluster.py:109: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  self.weights = Parallel(n_jobs=self.n_jobs)(delayed(get_weight)(self,X,features_to_predict) for features_to_predict in self.features_indices)
+/home/ubuntu/rf_cluster/slcluster.py:109: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  self.weights = Parallel(n_jobs=self.n_jobs)(delayed(get_weight)(self,X,features_to_predict) for features_to_predict in self.features_indices)
+/home/ubuntu/anaconda2/lib/python2.7/site-packages/sklearn/metrics/pairwise.py:1060: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  for s in gen_even_slices(Y.shape[0], n_jobs))
+/home/ubuntu/rf_cluster/slcluster.py:109: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  self.weights = Parallel(n_jobs=self.n_jobs)(delayed(get_weight)(self,X,features_to_predict) for features_to_predict in self.features_indices)
+/home/ubuntu/rf_cluster/slcluster.py:109: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  self.weights = Parallel(n_jobs=self.n_jobs)(delayed(get_weight)(self,X,features_to_predict) for features_to_predict in self.features_indices)
+/home/ubuntu/rf_cluster/slcluster.py:109: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  self.weights = Parallel(n_jobs=self.n_jobs)(delayed(get_weight)(self,X,features_to_predict) for features_to_predict in self.features_indices)
+/home/ubuntu/anaconda2/lib/python2.7/site-packages/sklearn/metrics/pairwise.py:1060: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  for s in gen_even_slices(Y.shape[0], n_jobs))
+/home/ubuntu/anaconda2/lib/python2.7/site-packages/sklearn/metrics/pairwise.py:1060: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  for s in gen_even_slices(Y.shape[0], n_jobs))
+/home/ubuntu/anaconda2/lib/python2.7/site-packages/sklearn/metrics/pairwise.py:1060: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  for s in gen_even_slices(Y.shape[0], n_jobs))
+/home/ubuntu/anaconda2/lib/python2.7/site-packages/sklearn/metrics/pairwise.py:1060: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  for s in gen_even_slices(Y.shape[0], n_jobs))
+/home/ubuntu/anaconda2/lib/python2.7/site-packages/sklearn/metrics/pairwise.py:1060: UserWarning: Multiprocessing-backed parallel loops cannot be nested, setting n_jobs=1
+  for s in gen_even_slices(Y.shape[0], n_jobs))
+Starting to score KMeans
+Done scoring KMeans
+Starting to score KMeans
+Done scoring KMeans
+Starting to score KMeans
+Done scoring KMeans
+Starting to score KMeans
+Done scoring KMeans
+Starting to score KMeans
+Done scoring KMeans
+Starting to score KMeans
+Done scoring KMeans
+Starting to score DoubleSLCluster
+starting to make distance matrix
+done making distance matrix
+starting to make distance matrix
+done making distance matrix
+starting to make distance matrix
+done making distance matrix
+starting to make distance matrix
+done making distance matrix
+starting to make distance matrix
+done making distance matrix
+starting to make distance matrix
+done making distance matrix
+starting to make distance matrix
+done making distance matrix
+starting to make distance matrix
+done making distance matrix
+starting to make distance matrix
+done making distance matrix
+starting to make distance matrix
+done making distance matrix
+Done scoring DoubleSLCluster
+Starting to score DoubleSLCluster
+starting to make distance matrix
+done making distance matrix
+starting to make distance matrix
+done making distance matrix
+starting to make distance matrix
+done making distance matrix
+starting to make distance matrix
+done making distance matrix
+starting to make distance matrix
+done making distance matrix
+starting to make distance matrix
+done making distance matrix
+starting to make distance matrix
+done making distance matrix
+starting to make distance matrix
+done making distance matrix
+starting to make distance matrix
+done making distance matrix
+starting to make distance matrix
+done making distance matrix
+Done scoring DoubleSLCluster
+Starting to score DoubleSLCluster
+starting to make distance matrix
+done making distance matrix
+starting to make distance matrix
+done making distance matrix
+starting to make distance matrix
+done making distance matrix
+starting to make distance matrix
+done making distance matrix
+starting to make distance matrix
+done making distance matrix
+starting to make distance matrix
+done making distance matrix
+starting to make distance matrix
+done making distance matrix
+starting to make distance matrix
+done making distance matrix
+starting to make distance matrix
+done making distance matrix
+starting to make distance matrix
+done making distance matrix
+Done scoring DoubleSLCluster
+Starting to score DoubleSLCluster
+starting to make distance matrix
+done making distance matrix
+starting to make distance matrix
+done making distance matrix
+starting to make distance matrix
+done making distance matrix
+starting to make distance matrix
+done making distance matrix
+starting to make distance matrix
+done making distance matrix
+starting to make distance matrix
+done making distance matrix
+starting to make distance matrix
+done making distance matrix
+starting to make distance matrix
+done making distance matrix
+starting to make distance matrix
+done making distance matrix
+starting to make distance matrix
+done making distance matrix
+Done scoring DoubleSLCluster
+Starting to score DoubleSLCluster
+starting to make distance matrix
+done making distance matrix
+starting to make distance matrix
+done making distance matrix
+starting to make distance matrix
+done making distance matrix
+starting to make distance matrix
+done making distance matrix
+starting to make distance matrix
+done making distance matrix
+starting to make distance matrix
+done making distance matrix
+starting to make distance matrix
+done making distance matrix
+starting to make distance matrix
+done making distance matrix
+starting to make distance matrix
+done making distance matrix
+starting to make distance matrix
+done making distance matrix
+Done scoring DoubleSLCluster
+Starting to score DoubleSLCluster
+starting to make distance matrix
+done making distance matrix
+starting to make distance matrix
+done making distance matrix
+starting to make distance matrix
+done making distance matrix
+starting to make distance matrix
+done making distance matrix
+starting to make distance matrix
+done making distance matrix
+starting to make distance matrix
+done making distance matrix
+starting to make distance matrix
+done making distance matrix
+starting to make distance matrix
+done making distance matrix
+starting to make distance matrix
+done making distance matrix
+starting to make distance matrix
+done making distance matrix
+Done scoring DoubleSLCluster
