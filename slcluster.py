@@ -73,6 +73,9 @@ class SLCluster(object):
         elif self.n_features_to_predict == 'log':
             n_output = int(np.log2(X.shape[1]))
 
+        if n_output == 0:
+            n_output = 1
+
         for i in xrange(self.n_forests):
             features_to_predict = np.random.choice(np.arange(X.shape[1]),(n_output,),replace=False)
             self.features_indices.append(features_to_predict)

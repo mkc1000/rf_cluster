@@ -36,6 +36,26 @@ def impossible_triangle(n):
 
     return np.vstack((sphere1,sphere2,sphere3))
 
+def skewer(n):
+    sphere1 = np.random.normal(size=(n/3,3))
+    sphere2 = np.random.normal(size=(n/3,3))
+    sphere3 = np.random.normal(size=(n/3,3))
+
+    sphere1[:,2] = sphere1[:,2]*10
+    sphere2[:,0] = sphere2[:,0]*10
+    sphere2[:,1] = sphere2[:,1]*3
+    sphere2[:,2] = sphere2[:,2]/10
+    sphere3[:,0] = sphere3[:,0]*10
+    sphere3[:,1] = sphere3[:,1]*3
+    sphere3[:,2] = sphere3[:,2]/10
+    sphere3 = rotate_cloud(sphere3, np.pi/2, 2)
+    sphere1 = sphere1 + np.array([0,0,1])
+    sphere2 = sphere2 + np.array([0,0,2])
+    sphere3 = sphere3 - np.array([0,0,2])
+
+    return np.vstack((sphere1,sphere2,sphere3))
+
+
 def plot_3d(arr, color='b'):
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
