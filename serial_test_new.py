@@ -19,7 +19,7 @@ SLC_PARAMS = {
     'k' : [2,3,4,5,6,8,10],
     'using_pca' : [False],
     'kmeans_type' : ['squishy'],
-    'n_forests' : [100],
+    'n_forests' : [128],
     'n_trees' : [1],
     'n_features_to_predict' : [0.5],
     'max_depth' : [3,5,6],
