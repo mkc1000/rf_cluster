@@ -21,7 +21,7 @@ DBSCAN_PARAMS = {
 AFFPROP_PARAMS = {
     'model': [AffinityPropagation],
     'dataset' : ['boston','diabetes','iris','breast_cancer'],
-    'damping': [0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
+    'damping': [0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1.0]
 }
 
 AGGLOM_PARAMS = {
@@ -97,8 +97,10 @@ def prepare_tuned_models(select_params_output):
 
 if __name__ == '__main__':
     ## Make baseline data
-    baseline_models = ['dbscan', 'affprop', 'agglom', 'birch', 'kmeans']
-    baseline_params = [DBSCAN_PARAMS, AFFPROP_PARAMS, AGGLOM_PARAMS, BIRCH_PARAMS, KMEANS_PARAMS]
+    #baseline_models = ['dbscan', 'affprop', 'agglom', 'birch', 'kmeans']
+    #baseline_params = [DBSCAN_PARAMS, AFFPROP_PARAMS, AGGLOM_PARAMS, BIRCH_PARAMS, KMEANS_PARAMS]
+    baseline_models = ['affprop', 'agglom', 'birch', 'kmeans']
+    baseline_params = [AFFPROP_PARAMS, AGGLOM_PARAMS, BIRCH_PARAMS, KMEANS_PARAMS]
     for model, params in zip(baseline_models, baseline_params):
         models_to_search = grid_search(params)
         fit_model_output = Parallel(n_jobs=-1)(delayed(fit_model)(model) for model in models_to_search)
